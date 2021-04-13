@@ -33,6 +33,13 @@ it_can_transform_using_js() {
 }
 
 it_can_transform_using_ts() {
+  local unipipe_bin=${UNIPIPE_BIN:-}
+  if [ -n "$unipipe_bin" ]; then
+    echo "Skipped, not supported when running tests using a compiled unipipe binary."
+    return
+  fi
+
+
   local repo_osb=$(init_repo)
   cp -r ./osb-git/ "$repo_osb"
   

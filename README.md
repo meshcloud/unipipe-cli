@@ -1,6 +1,6 @@
-# Unipipe CLI
+# UniPipe CLI
 
-The Unipipe CLI allows service developers to quickly implement CI/CD pipelines for common service scenarios
+The UniPipe CLI allows service developers to quickly implement CI/CD pipelines for common service scenarios
 like
 
 - generating and executing terraform
@@ -147,3 +147,19 @@ The unipipe cli is built on [deno](https://deno.land) (tl;dr: modern node.js) us
 - service owners can extend CLI behavior quickly (e.g. for templating IaC files) using javascript
 - easy to build single binary, fully-self contained executables via [deno compile](https://deno.land/manual@v1.8.3/tools/compiler)
 - leveraging a generally mature ecosystem (ts/js, libraries, tooling) that is easy to pick up for contributors
+
+## Development
+
+```bash
+# running locally (using deno run, not compiled)
+./unipipe/unipipe.sh --help
+
+# build binary
+./build.sh
+
+cd test
+# running e2e tests (using unipipe.sh, good for development)
+ ./all.sh
+# running e2e tests (using the release binary, good for release testing)
+./all.sh bin/unipipe
+```

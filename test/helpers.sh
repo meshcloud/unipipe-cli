@@ -19,7 +19,11 @@ run() {
 }
 
 unipipe() {
-  ../unipipe/unipipe "$@"
+  # check if a binary was set via env (e.g. from all.sh)
+  local unipipe_bin
+  unipipe_bin="${UNIPIPE_BIN:-../unipipe/unipipe.sh}"
+
+  "$unipipe_bin" "$@"
 }
 
 init_repo() {

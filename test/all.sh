@@ -2,6 +2,12 @@
 
 set -e
 
+unipipe_bin="${1}"
+
+if [ -n "$unipipe_bin" ]; then
+  export UNIPIPE_BIN="$unipipe_bin"
+fi
+
 $(dirname $0)/help.sh
 $(dirname $0)/list.sh
 $(dirname $0)/show.sh
