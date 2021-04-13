@@ -33,4 +33,4 @@ jobs:
         with:
           name: unipipe
           path: |
-            bin/unipipe
+            bin/unipipe-*
