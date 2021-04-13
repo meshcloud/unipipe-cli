@@ -1,4 +1,4 @@
-name: Release
+name: release
 
 # sadly, triggering on a successful build workflow and then downloading the artifacts from there is not yet
 # possible with github actions, see https://github.com/actions/download-artifact/issues/3
@@ -56,7 +56,6 @@ jobs:
       # upload steps
       # ${{ steps.create_release.outputs.upload_url }} from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
       - name: Upload unipipe-x86_64-apple-darwin
-        id: upload-release-asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -66,7 +65,6 @@ jobs:
           asset_name: unipipe-x86_64-apple-darwin
           asset_content_type: application/octet-stream
       - name: Upload unipipe-x86_64-unknown-linux-gnu
-        id: upload-release-asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -76,7 +74,6 @@ jobs:
           asset_name: unipipe-x86_64-unknown-linux-gnu
           asset_content_type: application/octet-stream
       - name: Upload unipipe-x86_64-pc-windows-msvc.exe
-        id: upload-release-asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
