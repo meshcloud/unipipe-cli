@@ -4,7 +4,12 @@ set -e -u
 
 set -o pipefail
 
+# a tiny assertsion library
 source $(dirname $0)/assert.sh
+
+# these are needed so that `tree` output does not confuse our tests
+export LC_CTYPE=C 
+export LANG=C
 
 export TMPDIR_ROOT=$(mktemp -d /tmp/git-tests.XXXXXX)
 # ensure that tmp directories get cleaned up after tests

@@ -8,10 +8,6 @@ source $(dirname $0)/helpers.sh
 handlers_js="$(cd "$(dirname "$0")"; pwd)"/handlers/registry.js
 handlers_ts="$(cd "$(dirname "$0")"; pwd)"/handlers/registry.ts
 
-# these are needed so that `tree` output does not confused
-export LC_CTYPE=C 
-export LANG=C
-
 it_can_transform_using_js() {
   local repo_osb=$(init_repo)
   cp -r ./osb-git/ "$repo_osb"
