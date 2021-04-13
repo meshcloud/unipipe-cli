@@ -9,14 +9,7 @@ handlers_js="$(cd "$(dirname "$0")"; pwd)"/handlers/registry.js
 handlers_ts="$(cd "$(dirname "$0")"; pwd)"/handlers/registry.ts
 
 it_can_transform_using_js() {
-  local repo_osb=$(init_repo)
-  cp -r ./osb-git/ "$repo_osb"
-  
-  local ref=$(make_commit_with_all_changes "$repo_osb")
-
-  echo "Input repo OSB"
-  tree "$repo_osb"
-
+  local repo_osb=$(init_repo_osb)
   local repo_tf=$(init_repo)
 
   unipipe transform --handlers "$handlers_js" --xport-repo "$repo_tf" "$repo_osb"
@@ -35,15 +28,7 @@ it_can_transform_using_ts() {
     return
   fi
 
-
-  local repo_osb=$(init_repo)
-  cp -r ./osb-git/ "$repo_osb"
-  
-  local ref=$(make_commit_with_all_changes "$repo_osb")
-
-  echo "Input repo OSB"
-  tree "$repo_osb"
-
+  local repo_osb=$(init_repo_osb)
   local repo_tf=$(init_repo)
 
   unipipe transform --handlers "$handlers_ts" --xport-repo "$repo_tf" "$repo_osb"

@@ -61,45 +61,6 @@ init_repo() {
   )
 }
 
-make_commit_to_file_on_branch() {
-  local repo=$1
-  local file=$2
-  local branch=$3
-  local msg=${4-}
-
-  # ensure branch exists
-  if ! git -C $repo rev-parse --verify $branch >/dev/null; then
-    git -C $repo branch $branch master
-  fi
-
-  # switch to branch
-  git -C $repo checkout -q $branch
-
-  # ensure dir exists
-  mkdir -p "$(dirname $repo/$file)"
-  # modify file and commit
-  echo x >> $repo/$file
-  git -C $repo add $file
-  git -C $repo \
-    -c user.name='test' \
-    -c user.email='test@example.com' \
-    commit -q -m "commit $(wc -l $repo/$file) $msg"
-
-  # output resulting sha
-  git -C $repo rev-parse HEAD
-}
-
-make_commit_to_file() {
-  make_commit_to_file_on_branch $1 $2 master "${3-}"
-}
-
-make_commit_to_branch() {
-  make_commit_to_file_on_branch $1 some-file $2
-}
-
-make_commit() {
-  make_commit_to_file $1 some-file "${2:-}"
-}
 
 make_commit_with_all_changes() {
   local repo="$1"
@@ -114,3 +75,14 @@ make_commit_with_all_changes() {
   git -C $repo rev-parse HEAD
 }
  
+init_repo_osb() {
+  local repo_osb=$(init_repo)
+  
+  # the trailing dot in the first arg means we copy "flat", i.e. only children of the osb-git dir
+  cp -r ./osb-git/. "$repo_osb"
+  
+  local ref=$(make_commit_with_all_changes "$repo_osb")
+
+  # return repo_osb
+  echo "$repo_osb"
+}
