@@ -1,7 +1,7 @@
-import { path } from "../deps.ts";
-import { write } from "../dir.ts";
-import { InstanceHandler } from "../handler.ts";
-import { readInstance } from "../osb.ts";
+import { write } from '../dir.ts';
+import { InstanceHandler } from '../handler.ts';
+import { ServiceInstance } from '../osb.ts';
+import { mapInstances } from './helpers.ts';
 
 export interface TransformOpts {
   osbRepoPath: string;
@@ -43,30 +43,21 @@ export async function transform(
 ) {
   const handlers = await loadHandlers(opts.handlers);
 
-  const instancesPath = path.join(opts.osbRepoPath, "instances");
-
-  // might be able to "parallelize" using Promise.all
-  for await (const dir of Deno.readDir(instancesPath)) {
-    if (!dir.isDirectory) {
-      continue;
-    }
-
-    const ip = path.join(instancesPath, dir.name);
-    const instance = await readInstance(ip);
-
+  mapInstances(opts.osbRepoPath, async (instance: ServiceInstance) => {
     const handler = handlers[instance.instance.serviceDefinitionId];
     const handledBy = (handler && handler.name) || "(ho handler found)";
+
     console.log(
       `- instance id: ${instance.instance.serviceInstanceId} | definition id: ${instance.instance.serviceDefinitionId} -> ${handledBy}`,
     );
 
     if (!handler) {
-      continue;
+      return;
     }
 
     const tree = handler.handle(instance);
     if (tree) {
       await write(tree, opts.outRepoPath);
     }
-  }
+  });
 }
