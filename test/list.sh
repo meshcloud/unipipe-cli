@@ -43,9 +43,9 @@ it_can_list_with_unknown_profile() {
 it_can_list_with_output_json() {
   local repo_osb=$(init_repo_osb)
   
-  out=$(unipipe list -o json "$repo_osb" | jq -r .[0].instance.serviceInstanceId)
+  out=$(unipipe list -o json "$repo_osb" | jq -c .[].instance.serviceInstanceId | sort | jq -sc)
   
-  assert_eq "eed1df43-e63c-40ad-995e-e21068254ef9" "$out" "expected jq pipe works"
+  assert_eq '["159440dd-652a-4e2b-916e-9cd4dde33c33","49c96fa5-46cc-4334-a718-378ceed2de81","eed1df43-e63c-40ad-995e-e21068254ef9"]' "$out" "expected jq pipe works"
 }
 
 run it_can_list
