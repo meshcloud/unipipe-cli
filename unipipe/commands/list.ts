@@ -4,6 +4,7 @@ import { mapInstances } from './helpers.ts';
 export interface ListOpts {
   osbRepoPath: string;
   profile?: string;
+  format: string;
 }
 
 function profileCols(profile?: string): string[] {
@@ -15,16 +16,36 @@ function profileCols(profile?: string): string[] {
     case "cloudfoundry":
       return ["organization", "space"];
     default:
-      console.error("Unrecognized profile: " + profile);
+      console.error("Unrecognized --profile: " + profile);
       Deno.exit(1);
   }
 }
 
 export async function list(opts: ListOpts) {
+  switch (opts.format) {
+    case "json":
+      await listJson(opts);
+      break;
+    case "text":
+      await listTable(opts);
+      break;
+    default:
+      console.error("Unrecognized --output-format: " + opts.format);
+      Deno.exit(1);
+  }
+}
+
+async function listJson(opts: ListOpts) {
+  const results = await mapInstances(opts.osbRepoPath, async(instance) => await instance);
+  console.log(JSON.stringify(results));
+}
+
+async function listTable(opts: ListOpts) {
   const pcols = profileCols(opts.profile);
 
   const results = await mapInstances(opts.osbRepoPath, async (instance) => {
     const i = instance.instance;
+
     const plan = i.serviceDefinition.plans.filter((x) => x.id === i.planId)[0];
 
     return await {
@@ -52,7 +73,7 @@ export async function list(opts: ListOpts) {
       "service",
       "plan",
       "status",
-      "deleted"
+      "deleted",
     ]),
   );
 }

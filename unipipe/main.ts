@@ -39,7 +39,13 @@ program
   .command("list <repo>")
   .option(
     "-p --profile [profile]",
-    "include context information according to the specified OSB API profile. Supported values are 'meshmarketplace' and 'cloudfoundry'.",
+    "include columns of context information according to the specified OSB API profile. Supported values are 'meshmarketplace' and 'cloudfoundry'. Ignored when '-o json' is set.",
+  )
+  .option(
+    "-o --output-format [output-format]",
+    "Output format. Supported formats are json and text.",
+    (x) => x,
+    "text",
   )
   .description(
     "Lists service instances status stored in a UniPipe OSB git repo.",
@@ -48,6 +54,7 @@ program
     const opts: ListOpts = {
       osbRepoPath: repo,
       profile: options.profile,
+      format: options.outputFormat,
     };
 
     await list(opts);
