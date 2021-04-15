@@ -10,6 +10,8 @@ compile(){
   deno compile --unstable --lite --allow-read --allow-write --allow-env --target "$target" --output "./bin/unipipe-$target" unipipe/main.ts
 }
 
+deno test --allow-read --allow-write --allow-env 
+
 compile "x86_64-unknown-linux-gnu"
 compile "x86_64-apple-darwin"
 compile "x86_64-pc-windows-msvc"
