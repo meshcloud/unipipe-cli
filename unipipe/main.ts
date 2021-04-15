@@ -1,8 +1,8 @@
-import { Command } from "./deps.ts";
-import { transform, TransformOpts } from "./commands/transform.ts";
-import { list } from "./commands/list.ts";
-import { show, ShowOpts } from "./commands/show.ts";
-import { update, UpdateOpts } from "./commands/update.ts";
+import { list, ListOpts } from './commands/list.ts';
+import { show, ShowOpts } from './commands/show.ts';
+import { transform, TransformOpts } from './commands/transform.ts';
+import { update, UpdateOpts } from './commands/update.ts';
+import { Command, Option } from './deps.ts';
 
 const program = new Command("UniPipe CLI");
 program.version("0.1.0");
@@ -37,11 +37,20 @@ program
 // list
 program
   .command("list <repo>")
+  .option(
+    "-p --profile [profile]",
+    "include context information according to the specified OSB API profile. Supported values are 'meshmarketplace' and 'cloudfoundry'.",
+  )
   .description(
     "Lists service instances status stored in a UniPipe OSB git repo.",
   )
-  .action(async (repo: string) => {
-    await list(repo);
+  .action(async (repo: string, options: any) => {
+    const opts: ListOpts = {
+      osbRepoPath: repo,
+      profile: options.profile,
+    };
+
+    await list(opts);
   });
 
 // show
@@ -87,7 +96,10 @@ program
     "--status <status>",
     "The status. Allowed values are 'in progress', 'succeeded' and 'failed'.",
   ) // todo use choices instead
-  .option("--description [description]", "Service Instance status description text.")
+  .option(
+    "--description [description]",
+    "Service Instance status description text.",
+  )
   .action(async (repo: string, options: Record<string, any>) => {
     const opts: UpdateOpts = {
       osbRepoPath: repo,

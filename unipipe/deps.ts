@@ -12,5 +12,5 @@ export { Type as YamlType } from "https://deno.land/std@0.90.0/encoding/_yaml/ty
 export { Schema as YamlSchema } from "https://deno.land/std@0.90.0/encoding/_yaml/schema.ts";
 
 // 3rd party deps
-export { Command } from "https://deno.land/x/cmd@v1.2.0/mod.ts";
+export { Command, Option } from "https://deno.land/x/cmd@v1.2.0/mod.ts";
 export { table } from "https://deno.land/x/minitable@v1.0/mod.ts";
