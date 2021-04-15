@@ -5,7 +5,7 @@ import { update, UpdateOpts } from './commands/update.ts';
 import { Command } from './deps.ts';
 
 const program = new Command("UniPipe CLI");
-program.version("0.1.0");
+program.version("0.2.0");
 program.description("Supercharge your GitOps OSB service pipelines");
 
 // transform
