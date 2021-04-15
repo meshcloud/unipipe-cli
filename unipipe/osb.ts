@@ -1,8 +1,9 @@
-import { parse } from "./yaml.ts";
+import { parse } from './yaml.ts';
 
 export interface OsbServiceInstance {
   serviceInstanceId: string;
   serviceDefinitionId: string;
+  planId: string;
 
   // todo: technically we know a bit better
   originatingIdentity: Record<string, unknown>;
@@ -12,7 +13,17 @@ export interface OsbServiceInstance {
   serviceDefinition: {
     id: string;
     name: string;
+    plans: {
+      id: string;
+      name: string;
+    }[];
   };
+
+  metadata: {
+    name: string;
+  };
+  
+  deleted?: boolean;
   // todo: more fields
 }
 
@@ -37,8 +48,8 @@ export interface OsbServiceInstanceStatus {
 }
 
 export interface ServiceInstance {
-  instance: OsbServiceInstance;            // contents of instance.yml
-  bindings: OsbServiceBinding[];           // contens of all bindings/$binding-id/binding.yml
+  instance: OsbServiceInstance; // contents of instance.yml
+  bindings: OsbServiceBinding[]; // contens of all bindings/$binding-id/binding.yml
   status: OsbServiceInstanceStatus | null; // contents of status.yml, null if not available
 }
 
@@ -62,7 +73,6 @@ export async function tryParseYamlFile(path: string) {
     const yml = await Deno.readTextFile(path);
     return parse(yml);
   } catch (error) {
-    console.debug(`Encountered tolerable error parsing ${path}: ` + error);
     return null;
   }
 }
