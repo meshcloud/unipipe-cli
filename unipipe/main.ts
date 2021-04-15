@@ -2,7 +2,7 @@ import { list, ListOpts } from './commands/list.ts';
 import { show, ShowOpts } from './commands/show.ts';
 import { transform, TransformOpts } from './commands/transform.ts';
 import { update, UpdateOpts } from './commands/update.ts';
-import { Command, Option } from './deps.ts';
+import { Command } from './deps.ts';
 
 const program = new Command("UniPipe CLI");
 program.version("0.1.0");
