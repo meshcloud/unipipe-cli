@@ -150,6 +150,8 @@ The unipipe cli is built on [deno](https://deno.land) (tl;dr: modern node.js) us
 
 ## Development
 
+You need [deno](https://deno.land) installed on your system.
+
 ```bash
 # running locally (using deno run, not compiled)
 ./unipipe/unipipe.sh --help
