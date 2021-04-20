@@ -134,7 +134,7 @@ class MyHandler {
 }
 
 const handlers = {
-  "d90c2b20-1d24-4592-88e7-6ab5eb147925": new VpcHandler(),
+  "d90c2b20-1d24-4592-88e7-6ab5eb147925": new MyHandler(),
 };
 
 handlers;
