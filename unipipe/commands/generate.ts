@@ -1,4 +1,5 @@
 import { catalog } from '../blueprints/catalog.yml.js';
+import { transformHandler } from '../blueprints/handler.js.js';
 import { Command, uuid } from '../deps.ts';
 
 export function registerGenerateCmd(program: Command) {
@@ -11,7 +12,12 @@ export function registerGenerateCmd(program: Command) {
     .description(
       "Generate a UUID. This is useful for generating unique ids for OSB service definitions, plans etc.",
     )
-    .action(() => generateUuid());
+    .action(() => generateUuid())
+    .command("transform-handler")
+    .description(
+      "Generate a transform-handler for `unipipe transform`.",
+    )
+    .action(() => generateTransformHandler());
 
   program
     .command("generate", blueprints)
@@ -26,4 +32,8 @@ function generateUuid() {
 
 function generateCatalog() {
   console.log(catalog);
+}
+
+function generateTransformHandler() {
+  console.log(transformHandler);
 }
