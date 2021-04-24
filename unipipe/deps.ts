@@ -5,6 +5,7 @@
 
 export * as path from "https://deno.land/std@0.90.0/path/mod.ts";
 export * as yaml from "https://deno.land/std@0.90.0/encoding/yaml.ts";
+export { v4 as uuid } from "https://deno.land/std@0.90.0/uuid/mod.ts";
 
 // note: it's a bit ugly that we have to foray into the private parts of the stdlib, but otherwise we can't configure
 // the options we need

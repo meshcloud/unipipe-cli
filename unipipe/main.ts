@@ -1,3 +1,4 @@
+import { registerGenerateCmd } from './commands/generate.ts';
 import { registerListCmd } from './commands/list.ts';
 import { registerShowCmd } from './commands/show.ts';
 import { registerTransformCmd } from './commands/transform.ts';
@@ -11,12 +12,11 @@ const program = new Command()
 
 program
   .command("completions", new CompletionsCommand());
-  
-// transform
 
 registerListCmd(program);
 registerShowCmd(program);
 registerTransformCmd(program);
 registerUpdateCmd(program);
+registerGenerateCmd(program);
 
 await program.parse(Deno.args);
