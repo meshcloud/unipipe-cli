@@ -37,7 +37,7 @@ it_can_list_with_unknown_profile() {
   
   out=$(unipipe list --profile xx "$repo_osb" 2>&1) || true
   
-  assert_eq "Unrecognized --profile: xx" "$out" "expected error"
+  assert_eq 'Illegal option --profile: must be one of ["meshmarketplace", "cloudfoundry"] but got "xx".' "$out" "expected error"
 }
 
 it_can_list_with_output_json() {
