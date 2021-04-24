@@ -14,24 +14,27 @@ The unipipe cli ships as a single, fully self-contained binary. This allows the 
 ## Commands
 
 ```text
-  Usage: UniPipe CLI [options] [command]
-  
-  Supercharge your GitOps OSB service pipelines
-  
-  Options:
-    -V, --version               output the version number
-    -h, --help                  display help for command
-  
-  Commands:
-    transform [options] <repo>  Transform service instances stored in a UniPipe
-                                OSB git repo using the specified handlers
-    list <repo>                 Lists service instances status stored in a
-                                UniPipe OSB git repo.
-    show [options] <repo>       Shows the state stored service instance stored
-                                in a UniPipe OSB git repo.
-    update [options] <repo>     update status of a service instance stored in a
-                                UniPipe OSB git repo.
-    help [command]              display help for command
+Usage:   unipipe
+Version: v0.2.0 
+
+Description:
+
+  UniPipe CLI - supercharge your GitOps OSB service pipelines
+
+Options:
+
+  -h, --help     - Show this help.                            
+  -V, --version  - Show the version number for this program.  
+
+Commands:
+
+  completions          - Generate shell completions.                                                                                        
+  list         <repo>  - Lists service instances status stored in a UniPipe OSB git repo.                                                   
+  show         <repo>  - Shows the state stored service instance stored in a UniPipe OSB git repo.                                          
+  transform    <repo>  - Transform service instances stored in a UniPipe OSB git repo using the specified handlers.                         
+  update       <repo>  - update status of a service instance stored in a UniPipe OSB git repo.                                              
+  generate             - Generate useful artifacts for working with UniPipe OSB such as catalogs, transform handlers, CI pipelines and more.
+
 ```
 
 ## Using unipipe cli in a CI/CD pipeline
@@ -58,7 +61,9 @@ git -C osb-repo push origin master
 
 ## Writing a Transform Handler
 
-The `unipipe transform` allows you to transform service instances (stored as `yaml` files by the unipipe service broker) into arbitrary infrastructure as code files. These handlers are javascript classes registered for handling a particular service definition using a registry object of the form:
+The `unipipe transform` allows you to transform service instances (stored as `yaml` files by the unipipe service broker) into arbitrary infrastructure as code files. These handlers are javascript classes registered for handling a particular service definition. For a quick start, you can use `unipipe generate transform-handler` to generate an sample handler file.
+
+A handler file needs to export a registry object of the form:
 
 ```javascript
 {

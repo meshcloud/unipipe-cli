@@ -1,3 +1,4 @@
+import { registerGenerateCmd } from './commands/generate.ts';
 import { registerListCmd } from './commands/list.ts';
 import { registerShowCmd } from './commands/show.ts';
 import { registerTransformCmd } from './commands/transform.ts';
@@ -6,17 +7,16 @@ import { Command, CompletionsCommand } from './deps.ts';
 
 const program = new Command()
   .name("unipipe")
-  .version("0.2.0")
+  .version("0.3.0")
   .description("UniPipe CLI - supercharge your GitOps OSB service pipelines");
 
 program
   .command("completions", new CompletionsCommand());
-  
-// transform
 
 registerListCmd(program);
 registerShowCmd(program);
 registerTransformCmd(program);
 registerUpdateCmd(program);
+registerGenerateCmd(program);
 
 await program.parse(Deno.args);
