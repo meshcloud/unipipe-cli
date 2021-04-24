@@ -1,4 +1,12 @@
+import { MeshMarketplaceContext } from './mesh.ts';
 import { parse } from './yaml.ts';
+
+export interface CloudFoundryContext {
+  // cloudfoundry context object, https://github.com/openservicebrokerapi/servicebroker/blob/master/profile.md#cloud-foundry-context-object  
+  platform: "cloudfoundry";
+  organization_name: string;
+  space_name: string;
+}
 
 export interface OsbServiceInstance {
   serviceInstanceId: string;
@@ -8,7 +16,7 @@ export interface OsbServiceInstance {
   // todo: technically we know a bit better
   originatingIdentity: Record<string, unknown>;
   parameters: Record<string, unknown>;
-  context: Record<string, unknown>;
+  context: MeshMarketplaceContext | CloudFoundryContext;
 
   serviceDefinition: {
     id: string;
