@@ -15,7 +15,7 @@ export function registerGenerateCmd(program: Command) {
     .action(() => generateUuid())
     .command("transform-handler")
     .description(
-      "Generate a transform-handler for `unipipe transform`.",
+      "Generate a javascript transform-handler for `unipipe transform`.",
     )
     .action(() => generateTransformHandler());
 
