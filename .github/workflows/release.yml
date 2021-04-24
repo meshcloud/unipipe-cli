@@ -24,9 +24,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: denolib/setup-deno@v2
+      - uses: denoland/setup-deno@main
         with:
-          deno-version: v1.8
+          deno-version: "~1.9"
       - uses: actions/cache@v2
         with:
           path: ~/.cache/deno # see https://deno.land/manual/linking_to_external_code
