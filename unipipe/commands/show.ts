@@ -30,6 +30,7 @@ export function registerShowCmd(program: Command) {
     .option(
       "-o, --output-format <output-format>",
       "Output format. Supported formats are yaml and json.",
+      { default: "yaml" }
     )
     .option(
       "--pretty",
