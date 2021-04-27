@@ -54,13 +54,21 @@ export interface OsbServiceInstanceStatus {
   status: "succeeded" | "failed";
   description: string;
 }
+export interface OsbServiceBindingStatus {
+  status: "succeeded" | "failed";
+  description: string;
+}
 
 export interface ServiceInstance {
   instance: OsbServiceInstance; // contents of instance.yml
-  bindings: OsbServiceBinding[]; // contens of all bindings/$binding-id/binding.yml
+  bindings: ServiceBinding[]; // contens of all bindings/$binding-id/binding.yml
   status: OsbServiceInstanceStatus | null; // contents of status.yml, null if not available
 }
 
+export interface ServiceBinding {
+  binding: OsbServiceBinding; // content of bindings/$binding-id/binding.yml
+  status: OsbServiceBindingStatus | null; // contents of status.yml, null if not available
+}
 /**
  * Parse a yaml file, throwing an error if it fails.
  * @param path 
