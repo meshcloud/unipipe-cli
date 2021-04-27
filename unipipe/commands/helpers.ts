@@ -71,8 +71,9 @@ export async function mapInstances<T>(
 
 /**
  * A helper function to implement commands that need to perform a map operation on bindings.
+ * If no bindings directory is found, an empty result is returned.
  * 
- * NOTE: includes error handling, and will exit the process with an appropriate error message if an error occurs (e.g. directory not found, failed to process etc.)
+ * NOTE: includes error handling, and will exit the process with an appropriate error message if an error occurs (e.g. failed to process etc.)
  * @param instancePath path to the osb repository
  * @param mapFn 
  * @returns 
@@ -104,8 +105,7 @@ export async function mapBindings<T>(
       }
     }
   } catch (error) {
-    console.error(`Failed to read bindings directory "${bindingsPath}".\n`, error);
-    Deno.exit(1);
+    // Do not error when bindings directory does not exist.
   }
 
   return results;
