@@ -115,7 +115,7 @@ export async function readInstance(path: string): Promise<ServiceInstance> {
 
   return {
     instance: instance,
-    bindings: bindings, // todo parse binding files, note that bindings have also a status file
+    bindings: bindings,
     status: status,
   };
 }
