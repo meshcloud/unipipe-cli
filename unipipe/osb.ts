@@ -1,5 +1,6 @@
 import { MeshMarketplaceContext } from './mesh.ts';
 import { parse } from './yaml.ts';
+import { mapBindings, mapInstances } from './commands/helpers.ts';
 
 export interface CloudFoundryContext {
   // cloudfoundry context object, https://github.com/openservicebrokerapi/servicebroker/blob/master/profile.md#cloud-foundry-context-object  
@@ -107,9 +108,34 @@ export async function readInstance(path: string): Promise<ServiceInstance> {
     | OsbServiceInstanceStatus
     | null;
 
+  const bindings = await mapBindings(
+    path,
+    async (binding) => await binding,
+  );
+
   return {
     instance: instance,
-    bindings: [], // todo parse binding files, note that bindings have also a status file
+    bindings: bindings, // todo parse binding files, note that bindings have also a status file
     status: status,
   };
+}
+
+/**
+ * Reads an OSB service binding from the git repo structure
+ * @param path 
+ * @returns 
+ */
+ export async function readBinding(path: string): Promise<ServiceBinding> {
+  const binding = await parseYamlFile(
+    `${path}/binding.yml`,
+  ) as OsbServiceBinding;
+
+  const status = await tryParseYamlFile(`${path}/status.yml`) as
+    | OsbServiceInstanceStatus
+    | null;
+
+    return {
+      binding: binding,
+      status: status,
+    };
 }

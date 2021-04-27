@@ -1,5 +1,5 @@
 import { ITypeInfo, path, Type } from '../deps.ts';
-import { readInstance, ServiceInstance } from '../osb.ts';
+import { readInstance, ServiceInstance, readBinding, ServiceBinding } from '../osb.ts';
 
 // TODO it would be nice to generate help text for allowed enum values
 export class EnumType extends Type<string> {
@@ -62,6 +62,49 @@ export async function mapInstances<T>(
     }
   } catch (error) {
     console.error(`Failed to read instances directory "${instancesPath}".\n`, error);
+    Deno.exit(1);
+  }
+
+  return results;
+}
+
+
+/**
+ * A helper function to implement commands that need to perform a map operation on bindings.
+ * 
+ * NOTE: includes error handling, and will exit the process with an appropriate error message if an error occurs (e.g. directory not found, failed to process etc.)
+ * @param instancePath path to the osb repository
+ * @param mapFn 
+ * @returns 
+ */
+export async function mapBindings<T>(
+  instancePath: string,
+  mapFn: (serviceBinding: ServiceBinding) => Promise<T>,
+): Promise<T[]> {
+  const bindingsPath = path.join(instancePath, "bindings");
+  const results: T[] = [];
+
+  try {
+    for await (const dir of Deno.readDir(bindingsPath)) {
+      if (!dir.isDirectory) {
+        continue;
+      }
+
+      const bp = path.join(bindingsPath, dir.name);
+
+      try {
+        const binding = await readBinding(bp);
+
+        const r = await mapFn(binding);
+
+        results.push(r);
+      } catch (error) {
+        console.error(`Failed to process service binding "${bp}".\n`, error);
+        Deno.exit(1);
+      }
+    }
+  } catch (error) {
+    console.error(`Failed to read bindings directory "${bindingsPath}".\n`, error);
     Deno.exit(1);
   }
 
