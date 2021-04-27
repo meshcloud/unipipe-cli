@@ -76,7 +76,7 @@ A handler gets passed a javascript object representing the entire state of the s
 ```typescript
 interface ServiceInstance {
   instance: OsbServiceInstance;            // contents of instance.yml
-  bindings: OsbServiceBinding[];           // contens of all bindings/$binding-id/binding.yml
+  bindings: ServiceBinding[];           // contents of all bindings/$binding-id/binding.yml
   status: OsbServiceInstanceStatus | null; // contents of status.yml, null if not available
 }
 

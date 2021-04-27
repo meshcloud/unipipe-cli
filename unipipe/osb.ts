@@ -1,5 +1,6 @@
 import { MeshMarketplaceContext } from './mesh.ts';
 import { parse } from './yaml.ts';
+import { mapBindings, mapInstances } from './commands/helpers.ts';
 
 export interface CloudFoundryContext {
   // cloudfoundry context object, https://github.com/openservicebrokerapi/servicebroker/blob/master/profile.md#cloud-foundry-context-object  
@@ -54,13 +55,21 @@ export interface OsbServiceInstanceStatus {
   status: "succeeded" | "failed";
   description: string;
 }
+export interface OsbServiceBindingStatus {
+  status: "succeeded" | "failed";
+  description: string;
+}
 
 export interface ServiceInstance {
   instance: OsbServiceInstance; // contents of instance.yml
-  bindings: OsbServiceBinding[]; // contens of all bindings/$binding-id/binding.yml
+  bindings: ServiceBinding[]; // contens of all bindings/$binding-id/binding.yml
   status: OsbServiceInstanceStatus | null; // contents of status.yml, null if not available
 }
 
+export interface ServiceBinding {
+  binding: OsbServiceBinding; // content of bindings/$binding-id/binding.yml
+  status: OsbServiceBindingStatus | null; // contents of status.yml, null if not available
+}
 /**
  * Parse a yaml file, throwing an error if it fails.
  * @param path 
@@ -99,9 +108,34 @@ export async function readInstance(path: string): Promise<ServiceInstance> {
     | OsbServiceInstanceStatus
     | null;
 
+  const bindings = await mapBindings(
+    path,
+    async (binding) => await binding,
+  );
+
   return {
     instance: instance,
-    bindings: [], // todo parse binding files, note that bindings have also a status file
+    bindings: bindings,
     status: status,
   };
+}
+
+/**
+ * Reads an OSB service binding from the git repo structure
+ * @param path 
+ * @returns 
+ */
+ export async function readBinding(path: string): Promise<ServiceBinding> {
+  const binding = await parseYamlFile(
+    `${path}/binding.yml`,
+  ) as OsbServiceBinding;
+
+  const status = await tryParseYamlFile(`${path}/status.yml`) as
+    | OsbServiceInstanceStatus
+    | null;
+
+    return {
+      binding: binding,
+      status: status,
+    };
 }
