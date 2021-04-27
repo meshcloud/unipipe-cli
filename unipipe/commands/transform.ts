@@ -39,7 +39,7 @@ async function transform(
 
   mapInstances(osbRepoPath, async (instance: ServiceInstance) => {
     const handler = handlers[instance.instance.serviceDefinitionId];
-    const handledBy = (handler && handler.name) || "(ho handler found)";
+    const handledBy = (handler && handler.name) || "(no handler found)";
 
     console.log(
       `- instance id: ${instance.instance.serviceInstanceId} | definition id: ${instance.instance.serviceDefinitionId} -> ${handledBy}`,
