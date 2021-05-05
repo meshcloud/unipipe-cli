@@ -12,7 +12,11 @@ export { v4 as uuid } from "https://deno.land/std@0.90.0/uuid/mod.ts";
 export { Type as YamlType } from "https://deno.land/std@0.90.0/encoding/_yaml/type.ts";
 export { Schema as YamlSchema } from "https://deno.land/std@0.90.0/encoding/_yaml/schema.ts";
 
-// 3rd party deps
+
+/**
+ * 3rd party deps
+ */
+
 export {
   Command,
   Type,
@@ -20,3 +24,4 @@ export {
 } from "https://deno.land/x/cliffy@v0.18.2/command/mod.ts";
 export type { ITypeInfo } from "https://deno.land/x/cliffy@v0.18.2/command/mod.ts";
 export { Table } from "https://deno.land/x/cliffy@v0.18.2/table/mod.ts";
+export { Select } from "https://deno.land/x/cliffy@v0.18.2/prompt/mod.ts";

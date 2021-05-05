@@ -2,15 +2,17 @@
 
 set -e
 
+deno_flags="--unstable --allow-read --allow-write --allow-env"
+
 mkdir -p bin
 
 compile(){
   target="$1"
 
-  deno compile --unstable --lite --allow-read --allow-write --allow-env --target "$target" --output "./bin/unipipe-$target" unipipe/main.ts
+  deno compile $deno_flags --lite --target "$target" --output "./bin/unipipe-$target" unipipe/main.ts
 }
 
-deno test --allow-read --allow-write --allow-env 
+deno test $deno_flags
 
 compile "x86_64-unknown-linux-gnu"
 compile "x86_64-apple-darwin"
