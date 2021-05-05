@@ -1,6 +1,6 @@
 export const transformHandler = `
 /**
- Here's a full example for a handlers.js file that you can pass to unipipe transform --handlers and that writes service instance parameters into a custom directory structure:
+ Here's a full example for a handlers.js file that you can pass to unipipe transform --registry-of-handlers and that writes service instance parameters into a custom directory structure:
 
   /
   \`-- customers

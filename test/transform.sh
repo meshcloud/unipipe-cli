@@ -12,7 +12,7 @@ it_can_transform_using_js() {
   local repo_osb=$(init_repo_osb)
   local repo_tf=$(init_repo)
 
-  unipipe transform --handlers "$handlers_js" --xport-repo "$repo_tf" "$repo_osb"
+  unipipe transform --registry-of-handlers "$handlers_js" --xport-repo "$repo_tf" "$repo_osb"
 
   echo "Output repo TF"
   tree "$repo_tf"
@@ -31,7 +31,7 @@ it_can_transform_using_ts() {
   local repo_osb=$(init_repo_osb)
   local repo_tf=$(init_repo)
 
-  unipipe transform --handlers "$handlers_ts" --xport-repo "$repo_tf" "$repo_osb"
+  unipipe transform --registry-of-handlers "$handlers_ts" --xport-repo "$repo_tf" "$repo_osb"
 
   echo "Output repo TF"
   tree "$repo_tf"

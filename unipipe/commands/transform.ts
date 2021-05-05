@@ -6,7 +6,7 @@ import { mapInstances } from './helpers.ts';
 
 interface TransformOpts {
   xportRepo: string;
-  handlers: string;
+  registryOfHandlers: string;
 }
 
 export function registerTransformCmd(program: Command) {
@@ -18,7 +18,7 @@ export function registerTransformCmd(program: Command) {
       "Transform service instances stored in a UniPipe OSB git repo using the specified handlers.",
     )
     .option(
-      "-h, --handlers <file>",
+      "-r, --registry-of-handlers <file>",
       "A registry of handlers for processing service instance transformation. These can be defined in either javascript or typescript as a JSON object with service ids as keys and handler objects as values. Note: typescript registries are not supported in single-binary builds of unipipe-cli.",
     )
     .option(
@@ -34,7 +34,7 @@ async function transform(
   osbRepoPath: string,
   opts: TransformOpts,
 ) {
-  const handlers = await loadHandlers(opts.handlers);
+  const handlers = await loadHandlers(opts.registryOfHandlers);
   const outRepoPath = opts.xportRepo || osbRepoPath;
 
   mapInstances(osbRepoPath, async (instance: ServiceInstance) => {

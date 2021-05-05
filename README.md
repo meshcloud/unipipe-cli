@@ -102,7 +102,7 @@ interface File {
 
 Alternatively you can of course implement your own logic to write directories, call HTTP APIs etc. using the standard Deno APIs.
 
- Here's a full example for a `handlers.js` file that you can pass to `unipipe transform --handlers` and that writes service instance parameters into a custom directory structure:
+ Here's a full example for a `handlers.js` file that you can pass to `unipipe transform --registry-of-handlers` and that writes service instance parameters into a custom directory structure:
 
 ```text
   /tmp/git-tests.oFi6F1/git-tests.WgUs9M/repo.fp5ZEK
