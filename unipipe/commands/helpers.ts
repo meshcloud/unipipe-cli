@@ -37,6 +37,9 @@ export class EnumType extends Type<string> {
 export async function mapInstances<T>(
   osbRepoPath: string,
   mapFn: (serviceInstance: ServiceInstance) => Promise<T>,
+  filterFn: (serviceInstance: ServiceInstance) => Promise<boolean> = async (instance: ServiceInstance) => {
+    return true
+    },
 ): Promise<T[]> {
   const instancesPath = path.join(osbRepoPath, "instances");
   const results: T[] = [];
@@ -48,15 +51,24 @@ export async function mapInstances<T>(
       }
 
       const ip = path.join(instancesPath, dir.name);
-
+      
       try {
         const instance = await readInstance(ip);
 
-        const r = await mapFn(instance);
+        const instancePassesFilter = await filterFn(instance);
 
-        results.push(r);
+        if (instancePassesFilter) {
+          try {
+            const r = await mapFn(instance);
+    
+            results.push(r);
+          } catch (error) {
+            console.error(`Failed to process service instance "${ip}".\n`, error);
+            Deno.exit(1);
+          }
+      }
       } catch (error) {
-        console.error(`Failed to process service instance "${ip}".\n`, error);
+        console.error(`Failed to apply filter to service instance "${ip}".\n`, error);
         Deno.exit(1);
       }
     }
