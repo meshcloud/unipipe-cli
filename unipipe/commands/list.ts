@@ -165,11 +165,9 @@ function buildFilterFn(opts: ListOpts ): (instance: ServiceInstance) => Promise<
     var statusFilterMatches = true
     if (opts.status !== undefined) {
       statusFilterMatches = (opts.status === instance.status?.status)
-      console.log("Status: ", opts.status, instance.status?.status, "result: ", opts.status === instance.status?.status )
     }
     var deletedFilterMatches = true
     if (opts.deleted !== undefined) {
-      console.log("Deleted: ",opts.deleted, instance.instance.deleted, "result: ", opts.deleted === instance.instance.deleted )
       deletedFilterMatches = (opts.deleted === instance.instance.deleted)
     }
     
