@@ -1,7 +1,7 @@
 // import { Table } from '../deps.ts';
 import { Command, Table } from '../deps.ts';
 import { MeshMarketplaceContext } from '../mesh.ts';
-import { CloudFoundryContext, OsbServiceInstance } from '../osb.ts';
+import { CloudFoundryContext, OsbServiceInstance, ServiceInstance } from '../osb.ts';
 import { EnumType, mapInstances } from './helpers.ts';
 
 // see https://stackoverflow.com/questions/44480644/string-union-to-string-array for the trick used here
@@ -20,13 +20,23 @@ const profilesType = new EnumType(ALL_PROFILES);
 interface ListOpts {
   profile?: Profile;
   outputFormat: Format;
+  status?: Status;
+  deleted?: boolean;
 }
+
+// TODO unify with statuses listed in ./update.ts
+const ALL_STATUSES = ["succeeded", "failed", "in progress"] as const;
+type StatusesTuple = typeof ALL_STATUSES;
+type Status = StatusesTuple[number];
+
+const statusesType = new EnumType(ALL_STATUSES);
 
 export function registerListCmd(program: Command) {
   program
     .command("list <repo>")
     .type("format", formatsType)
     .type("profile", profilesType)
+    .type("status", statusesType)
     .option(
       "-p, --profile [profile:profile]",
       "include columns of context information according to the specified OSB API profile. Supported values are 'meshmarketplace' and 'cloudfoundry'. Ignored when '-o json' is set.",
@@ -38,6 +48,14 @@ export function registerListCmd(program: Command) {
         default: "text",
       },
     )
+    .option(
+      "--status [status:status]", 
+      "Filters instances by status. Allowed values are 'in progress', 'succeeded' and 'failed'"
+    )
+    .option(
+      "--deleted [deleted:boolean]", 
+      "Filters instances by deleted. Allowed values are 'true' and 'false'"
+    )
     .description(
       "Lists service instances status stored in a UniPipe OSB git repo.",
     )
@@ -47,17 +65,20 @@ export function registerListCmd(program: Command) {
 }
 
 export async function list(osbRepoPath: string, opts: ListOpts) {
+
+  const filterFn = buildFilterFn(opts)
+
   switch (opts.outputFormat) {
     case "json":
-      await listJson(osbRepoPath);
+      await listJson(osbRepoPath, filterFn);
       break;
     case "text":
-      await listTable(osbRepoPath, opts.profile);
+      await listTable(osbRepoPath, filterFn, opts.profile);
       break;
   }
 }
 
-async function listJson(osbRepoPath: string) {
+async function listJson(osbRepoPath: string, filterFn : (instance: ServiceInstance) => Promise<boolean>) {
   const results = await mapInstances(
     osbRepoPath,
     async (instance) => await instance,
@@ -65,7 +86,7 @@ async function listJson(osbRepoPath: string) {
   console.log(JSON.stringify(results));
 }
 
-async function listTable(osbRepoPath: string, profile?: Profile) {
+async function listTable(osbRepoPath: string, filterFn : (instance: ServiceInstance) => Promise<boolean>, profile?: Profile) {
   const results = await mapInstances(osbRepoPath, async (instance) => {
     const i = instance.instance;
 
@@ -81,7 +102,7 @@ async function listTable(osbRepoPath: string, profile?: Profile) {
       instance.status?.status || "",
       i.deleted === undefined ? "" : i.deleted.toString(),
     ];
-  });
+  }, filterFn);
 
   const pcols = profileColHeaders(profile);
   const header = [
@@ -136,4 +157,22 @@ function profileColValues(
       ];
     }
   }
+}
+
+function buildFilterFn(opts: ListOpts ): (instance: ServiceInstance) => Promise<boolean> {
+  return ( async (instance: ServiceInstance) => {
+    
+    var statusFilterMatches = true
+    if (opts.status !== undefined) {
+      statusFilterMatches = (opts.status === instance.status?.status)
+      console.log("Status: ", opts.status, instance.status?.status, "result: ", opts.status === instance.status?.status )
+    }
+    var deletedFilterMatches = true
+    if (opts.deleted !== undefined) {
+      console.log("Deleted: ",opts.deleted, instance.instance.deleted, "result: ", opts.deleted === instance.instance.deleted )
+      deletedFilterMatches = (opts.deleted === instance.instance.deleted)
+    }
+    
+    return deletedFilterMatches && statusFilterMatches 
+    })
 }
