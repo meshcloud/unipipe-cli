@@ -82,6 +82,7 @@ async function listJson(osbRepoPath: string, filterFn : (instance: ServiceInstan
   const results = await mapInstances(
     osbRepoPath,
     async (instance) => await instance,
+    filterFn
   );
   console.log(JSON.stringify(results));
 }
@@ -163,11 +164,11 @@ function buildFilterFn(opts: ListOpts ): (instance: ServiceInstance) => Promise<
   return ( async (instance: ServiceInstance) => {
     
     var statusFilterMatches = true
-    if (opts.status !== undefined) {
+    if (opts.status !== undefined && opts.status !== null) {
       statusFilterMatches = (opts.status === instance.status?.status)
     }
     var deletedFilterMatches = true
-    if (opts.deleted !== undefined) {
+    if (opts.deleted !== undefined && opts.deleted !== null) {
       deletedFilterMatches = (opts.deleted === instance.instance.deleted)
     }
     
