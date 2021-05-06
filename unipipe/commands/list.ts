@@ -25,7 +25,7 @@ interface ListOpts {
 }
 
 // TODO unify with statuses listed in ./update.ts
-const ALL_STATUSES = ["succeeded", "failed", "in progress"] as const;
+const ALL_STATUSES = ["succeeded", "failed", "in progress", "EMPTY"] as const;
 type StatusesTuple = typeof ALL_STATUSES;
 type Status = StatusesTuple[number];
 
@@ -50,7 +50,7 @@ export function registerListCmd(program: Command) {
     )
     .option(
       "--status [status:status]", 
-      "Filters instances by status. Allowed values are 'in progress', 'succeeded' and 'failed'"
+      "Filters instances by status. Allowed values are 'in progress', 'succeeded', 'failed' and 'EMPTY' (no status file present for this instance)."
     )
     .option(
       "--deleted [deleted:boolean]", 
@@ -165,7 +165,7 @@ function buildFilterFn(opts: ListOpts ): (instance: ServiceInstance) => Promise<
     
     var statusFilterMatches = true
     if (opts.status !== undefined && opts.status !== null) {
-      statusFilterMatches = (opts.status === instance.status?.status)
+      statusFilterMatches = (opts.status === instance.status?.status) || ((opts.status === "EMPTY" )&&(instance.status === null))
     }
     var deletedFilterMatches = true
     if (opts.deleted !== undefined && opts.deleted !== null) {
