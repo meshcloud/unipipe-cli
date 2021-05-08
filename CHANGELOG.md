@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.5.0
+
+- transform: rename the `-h/--handler` option to `-r/--registry-of-handlers` to avoid a clash with `-h/--help`
+- generate: add a command to `generate` an ACI deployment for unipipe-service-broker
+- list: add `--status` and `--deleted` filter options
+
 ## v0.4.0
 
 - add support for reading service bindings, they are now available in `show`, `list`and `transform` commands
