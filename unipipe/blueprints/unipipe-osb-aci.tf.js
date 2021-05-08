@@ -4,7 +4,7 @@ export const unipipeOsbAciTerraform = `
 # - deploys on Azure ACI including caddy for SSL
 # 
 # Instructions
-#   1. Customize the locals block below to configure your deployment
+#   1. Customize the locals block below to configure your deployment and consider configuring a terraform backend
 #   2. Ensure you have valid azure credentials to execute terraform \`az login\`
 #   3. Run \`terraform init && terraform apply\`
 #   4. Add the deployed UniPipe OSB to your marketplace. 
@@ -24,9 +24,8 @@ terraform {
     }
   }
 
-  backend "gcs" {
-    bucket = "meshcloud-tf-states"
-    prefix = "meshstack-infra/unipipe-dev"
+  # use local state, add a remote backend to your liking
+  backend "local" {
   }
 }
 

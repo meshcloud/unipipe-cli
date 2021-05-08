@@ -1,5 +1,9 @@
 # Changelog
 
+## vNext
+
+- generate aci-deployment: use local backend by default in generated terraform
+
 ## v0.5.0
 
 - transform: rename the `-h/--handler` option to `-r/--registry-of-handlers` to avoid a clash with `-h/--help`
