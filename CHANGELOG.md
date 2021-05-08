@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.4.0
+
+- add support for reading service bindings, they are now available in `show`, `list`and `transform` commands
+- `show` command format option now defaults to yaml
+
 ## v0.3.0
 
 - upgraded deno runtime to 1.9
