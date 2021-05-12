@@ -37,7 +37,7 @@ export class EnumType extends Type<string> {
 export async function mapInstances<T>(
   osbRepoPath: string,
   mapFn: (serviceInstance: ServiceInstance) => Promise<T>,
-  filterFn: (serviceInstance: ServiceInstance) => Promise<boolean> = async (instance: ServiceInstance) => {
+  filterFn: (serviceInstance: ServiceInstance) => boolean = (instance: ServiceInstance) => {
     return true
     },
 ): Promise<T[]> {
@@ -55,7 +55,7 @@ export async function mapInstances<T>(
       try {
         const instance = await readInstance(ip);
 
-        const instancePassesFilter = await filterFn(instance);
+        const instancePassesFilter = filterFn(instance);
 
         if (instancePassesFilter) {
           try {
