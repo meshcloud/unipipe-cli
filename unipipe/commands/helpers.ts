@@ -56,17 +56,16 @@ export async function mapInstances<T>(
         const instance = await readInstance(ip);
 
         const instancePassesFilter = filterFn(instance);
+        if (!instancePassesFilter) {continue}
 
-        if (instancePassesFilter) {
-          try {
-            const r = await mapFn(instance);
-    
-            results.push(r);
-          } catch (error) {
-            console.error(`Failed to process service instance "${ip}".\n`, error);
-            Deno.exit(1);
-          }
-      }
+        try {
+          const r = await mapFn(instance);
+          results.push(r);
+        } catch (error) {
+          console.error(`Failed to process service instance "${ip}".\n`, error);
+          Deno.exit(1);
+        }
+
       } catch (error) {
         console.error(`Failed to apply filter to service instance "${ip}".\n`, error);
         Deno.exit(1);
