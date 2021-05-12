@@ -163,14 +163,8 @@ function profileColValues(
 function buildFilterFn(opts: ListOpts ): (instance: ServiceInstance) => boolean {
   return ( (instance: ServiceInstance) => {
     
-    var statusFilterMatches = true
-    if (opts.status !== undefined && opts.status !== null) {
-      statusFilterMatches = (opts.status === instance.status?.status) || ((opts.status === "EMPTY" )&&(instance.status === null))
-    }
-    var deletedFilterMatches = true
-    if (opts.deleted !== undefined && opts.deleted !== null) {
-      deletedFilterMatches = (opts.deleted === instance.instance.deleted)
-    }
+    var statusFilterMatches = ((opts.status === undefined || opts.status === null) || opts.status === instance.status?.status || ((opts.status === "EMPTY" )&&(instance.status === null)))
+    var deletedFilterMatches = ((opts.deleted === undefined || opts.deleted === null) || opts.deleted === instance.instance.deleted)
     
     return deletedFilterMatches && statusFilterMatches 
     })
