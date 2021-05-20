@@ -56,7 +56,9 @@ export async function mapInstances<T>(
         const instance = await readInstance(ip);
 
         const instancePassesFilter = filterFn(instance);
-        if (!instancePassesFilter) {continue}
+        if (!instancePassesFilter) {
+          continue;
+        }
 
         try {
           const r = await mapFn(instance);
