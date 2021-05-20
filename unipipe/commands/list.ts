@@ -78,7 +78,7 @@ export async function list(osbRepoPath: string, opts: ListOpts) {
   }
 }
 
-async function listJson(osbRepoPath: string, filterFn : (instance: ServiceInstance) => Promise<boolean>) {
+async function listJson(osbRepoPath: string, filterFn : (instance: ServiceInstance) => boolean) {
   const results = await mapInstances(
     osbRepoPath,
     async (instance) => await instance,
@@ -87,7 +87,7 @@ async function listJson(osbRepoPath: string, filterFn : (instance: ServiceInstan
   console.log(JSON.stringify(results));
 }
 
-async function listTable(osbRepoPath: string, filterFn : (instance: ServiceInstance) => Promise<boolean>, profile?: Profile) {
+async function listTable(osbRepoPath: string, filterFn : (instance: ServiceInstance) => boolean, profile?: Profile) {
   const results = await mapInstances(osbRepoPath, async (instance) => {
     const i = instance.instance;
 
@@ -160,18 +160,16 @@ function profileColValues(
   }
 }
 
-function buildFilterFn(opts: ListOpts ): (instance: ServiceInstance) => Promise<boolean> {
-  return ( async (instance: ServiceInstance) => {
+function buildFilterFn(opts: ListOpts ): (instance: ServiceInstance) => boolean {
+  return ( (instance: ServiceInstance) => {
+
+    const statusFilterMatches = !opts.status || 
+      opts.status === instance.status?.status || 
+      ((opts.status === "EMPTY" )&&(instance.status === null));
+
+    const deletedFilterMatches = !opts.deleted  ||
+      opts.deleted === instance.instance.deleted;
     
-    var statusFilterMatches = true
-    if (opts.status !== undefined && opts.status !== null) {
-      statusFilterMatches = (opts.status === instance.status?.status) || ((opts.status === "EMPTY" )&&(instance.status === null))
-    }
-    var deletedFilterMatches = true
-    if (opts.deleted !== undefined && opts.deleted !== null) {
-      deletedFilterMatches = (opts.deleted === instance.instance.deleted)
-    }
-    
-    return deletedFilterMatches && statusFilterMatches 
-    })
+    return deletedFilterMatches && statusFilterMatches;
+    });
 }
