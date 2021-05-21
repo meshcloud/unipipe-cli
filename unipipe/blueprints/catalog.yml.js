@@ -121,8 +121,8 @@ export const catalog =
 
   # a example for a network tenant service
   - id: 15et89a-4kl-8373-4c25-123-fde90f64tra4
-    name: json-schema
-    description: Provides a configurable default VPC in your Azure subscription.
+    name: Azure VNet
+    description: Provides a configurable default VNet in your Azure subscription.
     bindable: false
     plan_updateable: false
     instances_retrievable: true
@@ -173,11 +173,4 @@ export const catalog =
                       - description: WestEurope
                         enum:
                           - "WestEurope"
-                  tags:
-                    title: Tags for the product
-                    items:
-                      type: string
-                    minItems: 1
-                    type: array
-                    uniqueItems: true
 `;
