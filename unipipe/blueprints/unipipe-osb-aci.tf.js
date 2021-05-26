@@ -22,6 +22,10 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "~> 2.0"
     }
+    tls = {
+      source  = "hashicorp/tls"
+      version = "3.1.0"
+    }
   }
 
   # use local state, add a remote backend to your liking
@@ -42,13 +46,22 @@ locals {
   unipipe_basic_auth_username = "user"                       # OSB API basic auth username
   unipipe_git_remote          = "git@github.com:my/repo.git" # git repo URL, use a "deploy key" (GitHub) or similar to setup an automation user SSH key for unipipe
   unipipe_git_branch          = "master"                     # git branch name
-  unipipe_git_ssh_key = "<automation-user-SSH-KEY>"
 
 }
 
 provider "azurerm" {
   features {}
   subscription_id = local.subscription_id
+}
+
+provider "tls" {
+}
+
+# setup key pair for accesing the git repository
+# this setup will store the private key in your terrraform state and is thus not recommended for production use cases
+resource "tls_private_key" "unipipe_git_ssh_key" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
 }
 
 # first we need a resource group
@@ -101,7 +114,7 @@ resource "azurerm_container_group" "unipipe_osb_with_ssl" {
     secure_environment_variables = {
       "GIT_REMOTE"              = local.unipipe_git_remote
       "GIT_REMOTE_BRANCH"       = local.unipipe_git_branch
-      "GIT_SSH_KEY"             = local.unipipe_git_ssh_key
+      "GIT_SSH_KEY"             = tls_private_key.unipipe_git_ssh_key.private_key_pem
       "APP_BASIC_AUTH_USERNAME" = local.unipipe_basic_auth_username
       "APP_BASIC_AUTH_PASSWORD" = random_password.unipipe_basic_auth_password.result
     }
@@ -146,8 +159,13 @@ output "unipipe_basic_auth_username" {
 }
 
 output "unipipe_basic_auth_password" {
-  value = random_password.unipipe_basic_auth_password.result
+  value     = random_password.unipipe_basic_auth_password.result
   sensitive = true
+}
+
+output "unipipe_git_ssh_key" {
+  value     = tls_private_key.unipipe_git_ssh_key.public_key_pem
+  description = "UniPipe will use this key to access the git repository. You have to give read+write access on the target repository for this key."
 }
 
 output "info" {
