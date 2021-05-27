@@ -1,8 +1,10 @@
+import { uuid } from '../deps.ts';
+
 export const catalog = 
 `services:
   # define a simple service offering
   # for field documentation see https://github.com/openservicebrokerapi/servicebroker/blob/v2.15/spec.md#service-offering-object
-  - id: g40133dd-8373-4c25-8014-fde98f38a729 # this must be a UUID, generate e.g. via "unipipe generate uuid"
+  - id: ${uuid.generate()} # this uuid was randomly generated using "unipipe generate uuid"
     name: "Webservice-api"
     description: "This service spins up a webservice in aws."
     bindable: true
@@ -11,7 +13,7 @@ export const catalog =
     plans: 
       # service offerings can come in one or multiple plans
       # here we define plans in different t-shirt sizes
-      - id: "b13edcdf-eb54-44d3-8902-8f24d5acb07e"
+      - id: ${uuid.generate()} # this uuid was randomly generated using "unipipe generate uuid"
         name: "S"
         description: "A t2.nano instance"
         free: true
@@ -26,7 +28,7 @@ export const catalog =
                     title: username
                     type: string
 
-      - id: "c387b010-c002-4eab-8902-3851694ef7ba"
+      - id: ${uuid.generate()} # this uuid was randomly generated using "unipipe generate uuid"
         name: "M"
         description: "A t2.micro instance"
         free: true
@@ -42,7 +44,7 @@ export const catalog =
                     type: string
 
   # a more complex service example
-  - id: "22e1bbf3-b425-46cd-a03e-927f73abcaaf"
+  - id: ${uuid.generate()} # this uuid was randomly generated using "unipipe generate uuid"
     name: "Azure DevOps"
     description: "Onboard your team to Azure DevOps services"
     bindable: false
@@ -60,7 +62,7 @@ export const catalog =
       - "azure"
       - "devops"
     plans:
-      - id: "1c5c4f4d-bde5-4030-9874-b096fd3f78c5"
+      - id: ${uuid.generate()} # this uuid was randomly generated using "unipipe generate uuid"
         name: "Full Team Onboarding plan"
         description: "Enable all user in your meshProject on Azure DevOps."
         free: false
@@ -120,15 +122,15 @@ export const catalog =
                 type: object
 
   # a example for a network tenant service
-  - id: 15et89a-4kl-8373-4c25-123-fde90f64tra4
+  - id: ${uuid.generate()} # this uuid was randomly generated using "unipipe generate uuid"
     name: Azure VNet
-    description: Provides a configurable default VNet in your Azure subscription.
+    description: Provides a configurable default VNET in your Azure subscription.
     bindable: false
     plan_updateable: false
     instances_retrievable: true
     bindings_retrievable: false
     plans:
-      - id: bj2l4i-46as-44d3-7891-8f24d5hksa5w
+      - id: ${uuid.generate()} # this uuid was randomly generated using "unipipe generate uuid"
         name: default
         description: Standard vNet
         free: true
