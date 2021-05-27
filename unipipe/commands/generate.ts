@@ -1,7 +1,7 @@
 import { catalog } from '../blueprints/catalog.yml.js';
 import { transformHandler } from '../blueprints/handler.js.js';
 import { unipipeOsbAciTerraform } from '../blueprints/unipipe-osb-aci.tf.js';
-import { Command, Select, uuid } from '../deps.ts';
+import { colors, Command, Input, path, Select, uuid } from '../deps.ts';
 
 export function registerGenerateCmd(program: Command) {
   // the actual blueprint commands
@@ -64,9 +64,23 @@ async function generateUniPipeDeployment() {
         "Please open instructions at: https://github.com/meshcloud/unipipe-service-broker/wiki/2.-Deploy-a-Azure-Container-Group-for-Universal-Pipeline-Service-Broker---Caddy-(SSL)",
       );
       break;
-    case "aci_tf":
-      console.log(unipipeOsbAciTerraform);
+    case "aci_tf": {
+      const tfPath = await Input.prompt({
+        message:
+          "Pick a destination directory for the generated terraform files:",
+        default: "./",
+      });
+
+      const mainTf = path.join(tfPath, "main.tf");
+      await Deno.writeTextFile(
+        mainTf,
+        unipipeOsbAciTerraform,
+      );
+
+      console.log(colors.green(`writing ${mainTf}`));
+      console.log(`Edit ${mainTf}, then run "cd ${tfPath} && terraform apply"`);
       break;
+    }
     default:
       break;
   }
