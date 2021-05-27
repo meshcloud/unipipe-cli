@@ -77,8 +77,12 @@ async function generateUniPipeDeployment() {
         unipipeOsbAciTerraform,
       );
 
+
       console.log(colors.green(`writing ${mainTf}`));
-      console.log(`Edit ${mainTf}, then run "cd ${tfPath} && terraform apply"`);
+      
+      const instructions = unipipeOsbAciTerraform.substring(0, unipipeOsbAciTerraform.indexOf("terraform {"));
+      console.log("Instructions:");
+      console.log(instructions);
       break;
     }
     default:
