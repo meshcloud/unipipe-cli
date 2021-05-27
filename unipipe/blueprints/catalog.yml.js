@@ -123,8 +123,8 @@ export const catalog =
 
   # a example for a network tenant service
   - id: ${uuid.generate()} # this uuid was randomly generated using "unipipe generate uuid"
-    name: json-schema
-    description: Provides a configurable default VPC in your Azure subscription.
+    name: Azure VNet
+    description: Provides a configurable default VNET in your Azure subscription.
     bindable: false
     plan_updateable: false
     instances_retrievable: true
@@ -175,11 +175,4 @@ export const catalog =
                       - description: WestEurope
                         enum:
                           - "WestEurope"
-                  tags:
-                    title: Tags for the product
-                    items:
-                      type: string
-                    minItems: 1
-                    type: array
-                    uniqueItems: true
 `;
