@@ -1,4 +1,3 @@
-// import { Table } from '../deps.ts';
 import { Command, Table } from '../deps.ts';
 import { MeshMarketplaceContext } from '../mesh.ts';
 import { CloudFoundryContext, OsbServiceInstance, ServiceInstance } from '../osb.ts';
@@ -119,10 +118,6 @@ async function listTable(osbRepoPath: string, filterFn : (instance: ServiceInsta
     .header(header)
     .body(results)
     .render();
-
-  console.log(
-    // table(results, ),
-  );
 }
 
 function profileColHeaders(profile?: Profile): string[] {
