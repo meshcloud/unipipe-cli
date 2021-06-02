@@ -19,7 +19,8 @@ registerTransformCmd(program);
 registerUpdateCmd(program);
 registerGenerateCmd(program);
 
-if (Deno.args.length > 0)
+const hasArgs = Deno.args.length > 0;
+if (hasArgs)
   await program.parse(Deno.args);
 else
-  program.showHelp()
+  program.showHelp();
