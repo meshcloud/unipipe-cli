@@ -15,7 +15,7 @@ The unipipe cli ships as a single, fully self-contained binary. This allows the 
 
 ```text
 Usage:   unipipe
-Version: v0.2.0 
+Version: v0.6.0
 
 Description:
 
@@ -23,18 +23,17 @@ Description:
 
 Options:
 
-  -h, --help     - Show this help.                            
-  -V, --version  - Show the version number for this program.  
+  -h, --help     - Show this help.
+  -V, --version  - Show the version number for this program.
 
 Commands:
 
-  completions          - Generate shell completions.                                                                                        
-  list         <repo>  - Lists service instances status stored in a UniPipe OSB git repo.                                                   
-  show         <repo>  - Shows the state stored service instance stored in a UniPipe OSB git repo.                                          
-  transform    <repo>  - Transform service instances stored in a UniPipe OSB git repo using the specified handlers.                         
-  update       <repo>  - update status of a service instance stored in a UniPipe OSB git repo.                                              
+  completions          - Generate shell completions.
+  list         <repo>  - Lists service instances status stored in a UniPipe OSB git repo.
+  show         <repo>  - Shows the state stored service instance stored in a UniPipe OSB git repo.
+  transform    <repo>  - Transform service instances stored in a UniPipe OSB git repo using the specified handlers.
+  update       <repo>  - Update status of a service instance or binding stored in a UniPipe OSB git repo.
   generate             - Generate useful artifacts for working with UniPipe OSB such as catalogs, transform handlers, CI pipelines and more.
-
 ```
 
 ## Using unipipe cli in a CI/CD pipeline
