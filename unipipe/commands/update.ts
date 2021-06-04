@@ -10,6 +10,7 @@ const statusesType = new EnumType(ALL_STATUSES);
 
 interface UpdateOpts {
   instanceId: string;
+  bindingId: string;
   status: Status;
   description: string;
 }
@@ -19,11 +20,18 @@ export function registerUpdateCmd(program: Command) {
     .command("update <repo>")
     .type("status", statusesType)
     .description(
-      "update status of a service instance stored in a UniPipe OSB git repo.",
+      "Update status of a service instance or binding stored in a UniPipe OSB git repo.",
     )
     .option(
       "-i --instance-id <instance-id>",
-      "Service instance id.",
+      "Service instance id.", {
+    }
+    )
+    .option(
+      "-b --binding-id <binding-id>",
+      "Service binding id.", {
+      depends: ["instance-id"]
+    }
     )
     .option(
       "--status <status:status>",
@@ -31,7 +39,7 @@ export function registerUpdateCmd(program: Command) {
     ) // todo use choices instead
     .option(
       "--description [description]",
-      "Service Instance status description text.",
+      "Status description text.",
       {
         default: "",
       },
@@ -42,13 +50,29 @@ export function registerUpdateCmd(program: Command) {
 }
 
 async function update(osbRepoPath: string, opts: UpdateOpts) {
-  const statusYmlPath = path.join(
-    osbRepoPath,
-    "instances",
-    opts.instanceId,
-    "status.yml",
-  );
 
+  var statusYmlPath: string;
+
+  if (!opts.bindingId) {
+    const instanceStatusYmlPath = path.join(
+      osbRepoPath,
+      "instances",
+      opts.instanceId,
+      "status.yml",
+    );
+    statusYmlPath = instanceStatusYmlPath
+  } else {
+    const bindingStatusYmlPath = path.join(
+      osbRepoPath,
+      "instances",
+      opts.instanceId,
+      "bindings",
+      opts.bindingId,
+      "status.yml",
+    );
+    statusYmlPath = bindingStatusYmlPath
+  }
+    
   const yaml = stringify({
     status: opts.status,
     description: opts.description,
