@@ -1,21 +1,24 @@
 # UniPipe CLI
 
-The UniPipe CLI allows service developers to quickly implement CI/CD pipelines for common service scenarios
-like
+The UniPipe CLI allows service developers to quickly implement CI/CD pipelines
+for common service scenarios like
 
 - generating and executing terraform
 - sending emails
 - debugging service instances
 
-The unipipe cli ships as a single, fully self-contained binary. This allows the cli to be easily run in any CI/CD systems that supports a bash script job like Jenkins, Azure DevOps, GitLab or GitHub actions.
+The unipipe cli ships as a single, fully self-contained binary. This allows the
+cli to be easily run in any CI/CD systems that supports a bash script job like
+Jenkins, Azure DevOps, GitLab or GitHub actions.
 
-**Note: unipipe cli is still experimental**, please report any issues you encounter.
+**Note: unipipe cli is still experimental**, please report any issues you
+encounter.
 
 ## Commands
 
 ```text
 Usage:   unipipe
-Version: v0.6.0
+Version: v0.6.1
 
 Description:
 
@@ -47,12 +50,12 @@ git clone osb-repo
 # transform to terraform files
 unipipe transform ./osb-repo ./my-handlers.ts
 
-# for each dir 
+# for each dir
   # run tf apply on all terraform modules
   terraform apply -auto-approve
 
   unipipe update ./osb-repo $instance-id "provisioning succesfull"
-# 
+#
 
 git -C osb-repo commit
 git -C osb-repo push origin master
@@ -60,7 +63,11 @@ git -C osb-repo push origin master
 
 ## Writing a Transform Handler
 
-The `unipipe transform` allows you to transform service instances (stored as `yaml` files by the unipipe service broker) into arbitrary infrastructure as code files. These handlers are javascript classes registered for handling a particular service definition. For a quick start, you can use `unipipe generate transform-handler` to generate an sample handler file.
+The `unipipe transform` allows you to transform service instances (stored as
+`yaml` files by the unipipe service broker) into arbitrary infrastructure as
+code files. These handlers are javascript classes registered for handling a
+particular service definition. For a quick start, you can use
+`unipipe generate transform-handler` to generate an sample handler file.
 
 A handler file needs to export a registry object of the form:
 
@@ -70,12 +77,14 @@ A handler file needs to export a registry object of the form:
 };
 ```
 
-A handler gets passed a javascript object representing the entire state of the service instance as it's stored in the unipipe git repository. Here's the type definitions that your handler needs to conform to:
+A handler gets passed a javascript object representing the entire state of the
+service instance as it's stored in the unipipe git repository. Here's the type
+definitions that your handler needs to conform to:
 
 ```typescript
 interface ServiceInstance {
-  instance: OsbServiceInstance;            // contents of instance.yml
-  bindings: ServiceBinding[];           // contents of all bindings/$binding-id/binding.yml
+  instance: OsbServiceInstance; // contents of instance.yml
+  bindings: ServiceBinding[]; // contents of all bindings/$binding-id/binding.yml
   status: OsbServiceInstanceStatus | null; // contents of status.yml, null if not available
 }
 
@@ -85,7 +94,12 @@ export interface InstanceHandler {
 }
 ```
 
-Because generating a target directory structure of IaC files is so common, the `handle` function allows handlers to optionally return an object representation of the desired directory structure. If your handler returns such an object, unipipe cli will take care of writing out the desired files. This write will merge with the existing directory structure, i.e. any files already present but not explicitly specified will be preserved.
+Because generating a target directory structure of IaC files is so common, the
+`handle` function allows handlers to optionally return an object representation
+of the desired directory structure. If your handler returns such an object,
+unipipe cli will take care of writing out the desired files. This write will
+merge with the existing directory structure, i.e. any files already present but
+not explicitly specified will be preserved.
 
 ```typescript
 interface Dir {
@@ -99,12 +113,15 @@ interface File {
 }
 ```
 
-Alternatively you can of course implement your own logic to write directories, call HTTP APIs etc. using the standard Deno APIs.
+Alternatively you can of course implement your own logic to write directories,
+call HTTP APIs etc. using the standard Deno APIs.
 
- Here's a full example for a `handlers.js` file that you can pass to `unipipe transform --registry-of-handlers` and that writes service instance parameters into a custom directory structure:
+Here's a full example for a `handlers.js` file that you can pass to
+`unipipe transform --registry-of-handlers` and that writes service instance
+parameters into a custom directory structure:
 
 ```text
-  /tmp/git-tests.oFi6F1/git-tests.WgUs9M/repo.fp5ZEK
+/tmp/git-tests.oFi6F1/git-tests.WgUs9M/repo.fp5ZEK
   `-- customers
       `-- unipipe-osb-dev
           `-- osb-dev
@@ -146,11 +163,15 @@ handlers;
 
 ## Architecture
 
-The unipipe cli is built on [deno](https://deno.land) (tl;dr: modern node.js) using typescript. This provides the following benefits:
+The unipipe cli is built on [deno](https://deno.land) (tl;dr: modern node.js)
+using typescript. This provides the following benefits:
 
-- service owners can extend CLI behavior quickly (e.g. for templating IaC files) using javascript
-- easy to build single binary, fully-self contained executables via [deno compile](https://deno.land/manual@v1.8.3/tools/compiler)
-- leveraging a generally mature ecosystem (ts/js, libraries, tooling) that is easy to pick up for contributors
+- service owners can extend CLI behavior quickly (e.g. for templating IaC files)
+  using javascript
+- easy to build single binary, fully-self contained executables via
+  [deno compile](https://deno.land/manual@v1.8.3/tools/compiler)
+- leveraging a generally mature ecosystem (ts/js, libraries, tooling) that is
+  easy to pick up for contributors
 
 ## Development
 

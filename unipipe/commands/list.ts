@@ -48,11 +48,11 @@ export function registerListCmd(program: Command) {
       },
     )
     .option(
-      "--status [status:status]", 
+      "--status [status:status]",
       "Filters instances by status. Allowed values are 'in progress', 'succeeded', 'failed' and 'EMPTY' (no status file present for this instance)."
     )
     .option(
-      "--deleted [deleted:boolean]", 
+      "--deleted [deleted:boolean]",
       "Filters instances by deleted. Allowed values are 'true' and 'false'"
     )
     .description(
@@ -158,13 +158,14 @@ function profileColValues(
 function buildFilterFn(opts: ListOpts ): (instance: ServiceInstance) => boolean {
   return ( (instance: ServiceInstance) => {
 
-    const statusFilterMatches = !opts.status || 
-      opts.status === instance.status?.status || 
+    const statusFilterMatches = !opts.status ||
+      opts.status === instance.status?.status ||
       ((opts.status === "EMPTY" )&&(instance.status === null));
 
-    const deletedFilterMatches = !opts.deleted  ||
+    const deletedFilterMatches =
+      (!opts.deleted && opts.deleted !== false) ||
       opts.deleted === instance.instance.deleted;
-    
+
     return deletedFilterMatches && statusFilterMatches;
     });
 }
