@@ -9,7 +9,7 @@ mkdir -p bin
 compile(){
   target="$1"
 
-  deno compile $deno_flags --lite --target "$target" --output "./bin/unipipe-$target" unipipe/main.ts
+  deno compile $deno_flags --target "$target" --output "./bin/unipipe-$target" unipipe/main.ts
 }
 
 deno test $deno_flags
