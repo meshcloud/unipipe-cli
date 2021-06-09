@@ -207,12 +207,16 @@ First we need the unipipe-cli binary on our local machine. Head over to [unipipe
 # Create a new directory for working with unipipe cli
 mkdir unipipe-demo
 cd unipipe-demo
+
 # Download the binary; In this example I download the os x binaries of unipipe version v0.6.2
 wget https://github.com/meshcloud/unipipe-cli/releases/download/v0.6.2/unipipe-x86_64-apple-darwin
+
 # Rename binary to unipipe
 mv unipipe-x86_64-* unipipe
+
 # Make the binary executable
 chmod +x unipipe
+
 # Create an alias for unipipe
 alias unipipe=$(pwd)/unipipe
 ```
@@ -223,6 +227,7 @@ Let's start by deploying [UniPipe Service Broker](https://github.com/meshcloud/u
 
 ```sh
 unipipe generate unipipe-service-broker-deployment -f "main.tf"
+
 # The cli will ask for a couple of parameter.
 # After you entered all of them, the file main.tf is generated and ready to be applied.
 terraform apply
