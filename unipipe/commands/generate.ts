@@ -23,7 +23,7 @@ export function registerGenerateCmd(program: Command) {
     )
     .action(() => generateTransformHandler())
     //
-    .command("unipipe-deployment")
+    .command("unipipe-service-broker-deployment")
     .description(
       "Generate infrastructure-as-code deployments for the UniPipe Service broker.",
     )
