@@ -11,6 +11,14 @@ The unipipe cli ships as a single, fully self-contained binary. This allows the
 cli to be easily run in any CI/CD systems that supports a bash script job like
 Jenkins, Azure DevOps, GitLab or GitHub actions.
 
+The Unipipe CLI enables you to quickly deploy and build services on top of
+[Unipipe Service Broker](https://github.com/meshcloud/unipipe-service-broker).
+Once you decide to use our
+[OSB](https://github.com/meshcloud/unipipe-service-broker), you can easily
+create the infrastructure with
+`unipipe generate unipipe-service-broker-deployment` subcommand on the
+`UniPipe-CLI`.
+
 **Note: unipipe cli is still experimental**, please report any issues you
 encounter.
 
