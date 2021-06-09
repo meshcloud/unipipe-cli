@@ -203,7 +203,7 @@ cd test
 
 First we need the unipipe-cli binary on our local machine. Head over to [unipipe-cli releases](https://github.com/meshcloud/unipipe-cli/releases/latest) and pick the right binary for your system.
 
-```
+```sh
 # Create a new directory for working with unipipe cli
 mkdir unipipe-demo
 cd unipipe-demo
@@ -221,7 +221,7 @@ Now we are all set for getting started with our unipipe journey!
 
 Let's start by deploying [UniPipe Service Broker](https://github.com/meshcloud/unipipe-service-broker) to Azure.
 
-```
+```sh
 unipipe generate unipipe-service-broker-deployment -f "main.tf"
 # The cli will ask for a couple of parameter.
 # After you entered all of them, the file main.tf is generated and ready to be applied.
