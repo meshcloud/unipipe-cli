@@ -49,10 +49,11 @@ locals {
   # unipipe configuration
   unipipe_version             = "v1.1.0"                                    # unipipe version, see https://github.com/meshcloud/unipipe-service-broker/releases
   unipipe_basic_auth_username = "user"                                      # OSB API basic auth username
-  unipipe_git_remote          = "git@github.com:meshcloud/unipipe-demo.git" # git repo URL, use a "deploy key" (GitHub) or similar to setup an automation user SSH key for unipipe
+  unipipe_git_remote          = "git@github.com:<GITHUB_ORGANIZATION/GITHUB_REPO>.git" # git repo URL, use a "deploy key" (GitHub) or similar to setup an automation user SSH key for unipipe
   unipipe_git_branch          = "master"                                    # git branch name
 
   #tf postfix for preventing already-in-use errors
+  resource_group_name_postfix = "\${local.resource_group_name}-\${random_string.postfix.result}"
   dns_postfix                          = "\${local.dns_name_label}-\${random_string.postfix.result}"
   unipipe_storage_account_name_postfix = "unipipeosb\${random_string.postfix.result}"
 }
@@ -76,7 +77,7 @@ resource "tls_private_key" "unipipe_git_ssh_key" {
 
 # first we need a resource group
 resource "azurerm_resource_group" "unipipe_osb" {
-  name     = local.resource_group_name
+  name     = local.resource_group_name_postfix
   location = local.location
 }
 
@@ -167,8 +168,8 @@ resource "azurerm_container_group" "unipipe_osb_with_ssl" {
 }
 
 output "url" {
-  value       = "https://\${azurerm_container_group.unipipe_osb_with_ssl.fqdn}/v2/catalog"
-  description = "UniPipe OSB API URL"
+  value       = "https://\${azurerm_container_group.unipipe_osb_with_ssl.fqdn}"
+  description = "UniPipe OSB API URL. If you want access to the catalog page, you can add /v2/catalog at the end of the url."
 }
 
 output "unipipe_basic_auth_username" {
