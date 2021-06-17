@@ -5,8 +5,9 @@ export const unipipeOsbGCloudCloudRunTerraform = `
 #
 # Instructions
 #   1. Customize the variable blocks below to configure your deployment and consider configuring a terraform backend
-#   2. Ensure you have valid azure credentials to execute terraform \`gcloud auth login\` and \`gcloud auth configure-docker\`
-#      2.1. you have to be OWNER on Gcloud Project to execute the terraform otherwise google_iam_policy creation fails
+#   2. Ensure you have valid GCloud credentials to execute terraform \`gcloud auth login\` and \`gcloud auth configure-docker\`
+#      2.1. you have to be OWNER on Gcloud Project to execute this terraform template otherwise google_iam_policy resource creation fails
+#      2.2. the template will use docker pull/push commands for mirroring the unipipe-service-broker images. To do that you should install \`docker\` on your machine.
 #   3. Run \`terraform init && terraform apply\`
 #      3.1. Set create_cloudrun_service variable as false on your first setup. We should add our auto generated ssh deploy key into the github repository and also you should commit your first catalog.yml
 #      3.2. After you set your Deploy key and Catalog.yml, execute \`terraform apply\` once more with create_cloudrun_service variable as true
@@ -29,8 +30,8 @@ variable "project_id" {
 }
 
 variable "region" {
-  description = "The region to deploy resource into"
-  default     = "us-central1"
+  description = "The Region to deploy resource into"
+  default     = "europe-west3"
 }
 
 variable "cloudrun_service_name" {
@@ -44,7 +45,7 @@ variable "unipipe_version" {
 }
 
 variable "gcloud_container_registry_prefix" {
-  description = "GCloud Container Registry address. Example Format: <region>.gcr.io/<project_id>"
+  description = "GCloud Container Registry address. Format: <region>.gcr.io/<project_id>"
   default     = "eu.gcr.io/GCLOUDPROJECT"
 }
 
@@ -81,7 +82,7 @@ terraform {
     }
   }
 
-  # use local state, add a remote backend to your liking
+  # use local state files, if you want you can put your state files to your remote storage as well
   backend "local" {
   }
 }
@@ -186,6 +187,7 @@ output "unipipe_basic_auth_username" {
 
 output "unipipe_basic_auth_password" {
   value     = random_password.unipipe_basic_auth_password.result
+  description = "Execute the command to see the password => 'terraform output unipipe_basic_auth_password'"
   sensitive = true
 }
 
