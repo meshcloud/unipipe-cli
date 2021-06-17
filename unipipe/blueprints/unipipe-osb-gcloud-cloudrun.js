@@ -19,7 +19,7 @@ export const unipipeOsbGCloudCloudRunTerraform = `
 #############################################################
 
 variable "create_cloudrun_service" {
-  description = "You should set it as 'True' after you integrate your the Github repository and commit your first catalog.yml"
+  description = "You should set it as 'True' after you integrate your Github repository and commit your first catalog.yml"
   type        = bool
   default     = false
 }
