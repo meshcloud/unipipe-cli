@@ -50,7 +50,7 @@ variable "gcloud_container_registry_prefix" {
 }
 
 variable "unipipe_git_remote" {
-  description = "Git repo URL, use a deploy key (GitHub) or similar to setup an automation user SSH key for unipipe"
+  description = "Git repo URL. Use a deploy key (GitHub) or similar to setup an automation user SSH key for unipipe."
   default     = "git@github.com:ORGANIZATION/REPO.git"
 }
 
