@@ -1,6 +1,7 @@
 import { catalog } from '../blueprints/catalog.yml.js';
 import { transformHandler } from '../blueprints/handler.js.js';
 import { unipipeOsbAciTerraform } from '../blueprints/unipipe-osb-aci.tf.js';
+import { unipipeOsbGCloudCloudRunTerraform } from "../blueprints/unipipe-osb-gcloud-cloudrun.js";
 import { Command, Select, uuid } from '../deps.ts';
 
 export function registerGenerateCmd(program: Command) {
@@ -48,13 +49,14 @@ function generateTransformHandler() {
   console.log(transformHandler);
 }
 
-type DeploymentType = "aci_tf" | "aci_az";
+type DeploymentType = "aci_tf" | "aci_az" | "gc_cloudrun_tf";
 async function generateUniPipeDeployment() {
   const target: DeploymentType = await Select.prompt({
     message: "Pick the target deployment environment:",
     options: [
       { name: "Azure ACI (terraform)", value: "aci_tf" },
       { name: "Azure ACI (azure-cli)", value: "aci_az" },
+      { name: "GCloud CloudRun (terraform)", value: "gc_cloudrun_tf" }
     ],
   }) as DeploymentType;
 
@@ -66,6 +68,9 @@ async function generateUniPipeDeployment() {
       break;
     case "aci_tf":
       console.log(unipipeOsbAciTerraform);
+      break;
+    case "gc_cloudrun_tf":
+      console.log(unipipeOsbGCloudCloudRunTerraform);
       break;
     default:
       break;
