@@ -10,16 +10,16 @@ export const unipipeOsbGCloudCloudRunTerraform = `
 #      2.2. the template will use docker pull/push commands for mirroring the unipipe-service-broker images. To do that you should install \`docker\` on your machine.
 #   3. Run \`terraform init && terraform apply\`
 #      3.1. Set create_cloudrun_service variable as false on your first setup. We should add our auto generated ssh deploy key into the github repository and also you should commit your first catalog.yml
-#      3.2. After you set your Deploy key and Catalog.yml, execute \`terraform apply\` once more with create_cloudrun_service variable as true
+#      3.2. You should add the unipipe_git_ssh_key to your repository as a Deploy Key and also give the write-access permission on it
+#      3.3. After you set your Deploy key and Catalog.yml, execute \`terraform apply\` once more with create_cloudrun_service variable as true
 #   4. Add the deployed UniPipe OSB to your marketplace.
 #      4.1. You will find all necessary info in the terraform output.
-#      4.1.1. You should add the unipipe_git_ssh_key to your repository as a Deploy Key and also give the write-access permission on it
 #      4.2. To view the OSB API password run \`terraform output unipipe_basic_auth_password\`
 #      4.3. Ensure your git repo contains a valid catalog.yml. You can also generate an example catalog using \`unipipe generate catalog\`
 #############################################################
 
 variable "create_cloudrun_service" {
-  description = "You should set it as 'True' after you integrate your Github repository and commit your first catalog.yml"
+  description = "You should set it as 'True' after you configure your Github repository and apply the terraform template again."
   type        = bool
   default     = false
 }
