@@ -1,8 +1,9 @@
 import { catalog } from '../blueprints/catalog.yml.js';
 import { transformHandler } from '../blueprints/handler.js.js';
 import { unipipeOsbAciTerraform } from '../blueprints/unipipe-osb-aci.tf.js';
+import { unipipeOsbGCloudCloudRunTerraform } from '../blueprints/unipipe-osb-gcloud-cloudrun.js';
 import { colors, Command, Input, Select, uuid } from '../deps.ts';
-import { Dir, write } from '../dir.ts';
+import { Dir, File, write } from '../dir.ts';
 
 export function registerGenerateCmd(program: Command) {
   // the actual blueprint commands
@@ -49,13 +50,14 @@ function generateTransformHandler() {
   console.log(transformHandler);
 }
 
-type DeploymentType = "aci_tf" | "aci_az";
+type DeploymentType = "aci_tf" | "aci_az" | "gc_cloudrun_tf";
 async function generateUniPipeDeployment() {
   const target: DeploymentType = await Select.prompt({
     message: "Pick the target deployment environment:",
     options: [
       { name: "Azure ACI (terraform)", value: "aci_tf" },
       { name: "Azure ACI (azure-cli)", value: "aci_az" },
+      { name: "GCloud CloudRun (terraform)", value: "gc_cloudrun_tf" },
     ],
   }) as DeploymentType;
 
@@ -78,18 +80,38 @@ async function generateUniPipeDeployment() {
         ],
       };
 
-      await write(
-        dir,
-        "./",
-        (file) => console.log(colors.green(`writing ${file}`)),
-      );
+      writeTerraformDir(dir);
+      break;
+    }
+    case "gc_cloudrun_tf": {
+      const dir: Dir = {
+        name: destinationDir,
+        entries: [
+          { name: "main.tf", content: unipipeOsbGCloudCloudRunTerraform },
+        ],
+      };
 
-      writeInstructions(unipipeOsbAciTerraform);
+      writeTerraformDir(dir);
       break;
     }
     default:
       throw new Error(`Received unexpected target ${target} from prompt.`);
   }
+}
+
+async function writeTerraformDir(dir: Dir){
+  await write(
+    dir,
+    "./",
+    (file) => console.log(colors.green(`writing ${file}`)),
+  );
+
+  const mainTf = dir.entries.find(x => x.name==="main.tf") as File;
+  if (!mainTf){
+    throw Error("no main.tf file found in root directory");
+  }
+
+  writeInstructions(mainTf.content);
 }
 
 function writeInstructions(terraform: string) {
