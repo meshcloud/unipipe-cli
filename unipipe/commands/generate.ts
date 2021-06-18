@@ -1,7 +1,8 @@
 import { catalog } from '../blueprints/catalog.yml.js';
 import { transformHandler } from '../blueprints/handler.js.js';
 import { unipipeOsbAciTerraform } from '../blueprints/unipipe-osb-aci.tf.js';
-import { colors, Command, Input, path, Select, uuid } from '../deps.ts';
+import { colors, Command, Input, Select, uuid } from '../deps.ts';
+import { Dir, write } from '../dir.ts';
 
 export function registerGenerateCmd(program: Command) {
   // the actual blueprint commands
@@ -58,6 +59,11 @@ async function generateUniPipeDeployment() {
     ],
   }) as DeploymentType;
 
+  const destinationDir = await Input.prompt({
+    message: "Pick a destination directory for the generated terraform files:",
+    default: "./",
+  });
+
   switch (target) {
     case "aci_az":
       console.log(
@@ -65,27 +71,33 @@ async function generateUniPipeDeployment() {
       );
       break;
     case "aci_tf": {
-      const tfPath = await Input.prompt({
-        message:
-          "Pick a destination directory for the generated terraform files:",
-        default: "./",
-      });
+      const dir: Dir = {
+        name: destinationDir,
+        entries: [
+          { name: "main.tf", content: unipipeOsbAciTerraform },
+        ],
+      };
 
-      const mainTf = path.join(tfPath, "main.tf");
-      await Deno.writeTextFile(
-        mainTf,
-        unipipeOsbAciTerraform,
+      await write(
+        dir,
+        "./",
+        (file) => console.log(colors.green(`writing ${file}`)),
       );
 
-
-      console.log(colors.green(`writing ${mainTf}`));
-      
-      const instructions = unipipeOsbAciTerraform.substring(0, unipipeOsbAciTerraform.indexOf("terraform {"));
-      console.log("Instructions:");
-      console.log(instructions);
+      writeInstructions(unipipeOsbAciTerraform);
       break;
     }
     default:
-      break;
+      throw new Error(`Received unexpected target ${target} from prompt.`);
   }
+}
+
+function writeInstructions(terraform: string) {
+  // KISS, just find where the actual terraform code starts and log the file header above it
+  const instructions = terraform.substring(
+    0,
+    terraform.indexOf("terraform {"),
+  );
+  console.log("Instructions:");
+  console.log(instructions);
 }
