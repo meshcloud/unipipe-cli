@@ -81,6 +81,7 @@ async function generateUniPipeDeployment() {
       };
 
       writeTerraformDir(dir);
+      writeTerraformInstructions(unipipeOsbAciTerraform);
       break;
     }
     case "gc_cloudrun_tf": {
@@ -92,6 +93,7 @@ async function generateUniPipeDeployment() {
       };
 
       writeTerraformDir(dir);
+      writeTerraformInstructions(unipipeOsbGCloudCloudRunTerraform);
       break;
     }
     default:
@@ -105,21 +107,14 @@ async function writeTerraformDir(dir: Dir){
     "./",
     (file) => console.log(colors.green(`writing ${file}`)),
   );
-
-  const mainTf = dir.entries.find(x => x.name==="main.tf") as File;
-  if (!mainTf){
-    throw Error("no main.tf file found in root directory");
-  }
-
-  writeInstructions(mainTf.content);
 }
 
-function writeInstructions(terraform: string) {
+function writeTerraformInstructions(terraform: string, initialText: string='Instructions:') {
   // KISS, just find where the actual terraform code starts and log the file header above it
   const instructions = terraform.substring(
     0,
     terraform.indexOf("terraform {"),
   );
-  console.log("Instructions:");
+  console.log(initialText);
   console.log(instructions);
 }
