@@ -1,7 +1,6 @@
-import { Command, path } from '../deps.ts';
+import { Command, EnumType, path } from '../deps.ts';
 import { readInstance } from '../osb.ts';
 import { stringify } from '../yaml.ts';
-import { EnumType } from './helpers.ts';
 
 const ALL_FORMATS = ["json", "yaml"] as const;
 type FormatsTuple = typeof ALL_FORMATS;

@@ -17,11 +17,11 @@ export { Schema as YamlSchema } from "https://deno.land/std@0.99.0/encoding/_yam
 /**
  * 3rd party deps
  */
-
 export {
   Command,
-  CompletionsCommand,
-  Type
+  Type,
+  EnumType,
+  CompletionsCommand
 } from "https://deno.land/x/cliffy@v0.19.2/command/mod.ts";
 export type { ITypeInfo } from "https://deno.land/x/cliffy@v0.19.2/command/mod.ts";
 export { Table } from "https://deno.land/x/cliffy@v0.19.2/table/mod.ts";
