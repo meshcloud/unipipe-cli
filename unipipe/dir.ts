@@ -1,4 +1,4 @@
-import { path } from "./deps.ts";
+import { path } from './deps.ts';
 
 export interface Dir {
   name: string;
@@ -25,20 +25,23 @@ function isDir(x: File | Dir): x is Dir {
  * @param currentDir 
  * @param basePath 
  */
-export async function write(currentDir: Dir, basePath: string) {
+export async function write(currentDir: Dir, basePath: string, progress?: (path: string) => void) {
   const currentPath = path.join(basePath, currentDir.name);
 
   // ensure dir exists, mkdir -p
   await Deno.mkdir(currentPath, { recursive: true });
+  progress && progress(currentPath);
 
   const files = currentDir.entries.filter(isFile);
   for await (const file of files) {
     const fp = path.join(currentPath, file.name);
+    
+    progress && progress(fp);
     await Deno.writeTextFile(fp, file.content);
   }
 
   const dirs = currentDir.entries.filter(isDir);
   for await (const dir of dirs) {
-    await write(dir, currentPath); // recurse
+    await write(dir, currentPath, progress); // recurse
   }
 }

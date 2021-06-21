@@ -1,10 +1,9 @@
 export const unipipeOsbAciTerraform = `
 #####################################
-# UniPipe Service Broker Deployment
-# - deploys on Azure ACI including caddy for SSL
-#
-# Instructions
-#   1. Customize the locals block below to configure your deployment and consider configuring a terraform backend
+# UniPipe Service Broker Deployment on Azure ACI including caddy for SSL.
+# 
+# How to use this terraform file:
+#   1. Customize the \`locals\` block to configure variables of your deployment and consider configuring a terraform backend for storing state.
 #   2. Ensure you have valid azure credentials to execute terraform \`az login\`
 #   3. Run \`terraform init && terraform apply\`
 #   4. Add the deployed UniPipe OSB to your marketplace.
@@ -12,7 +11,7 @@ export const unipipeOsbAciTerraform = `
 #      1.1 You should add the unipipe_git_ssh_key to your repository as a Deploy Key and also give the write-access permission on it
 #      2. To view the OSB API password run \`terraform output unipipe_basic_auth_password\`
 #      3. Ensure your git repo contains a valid catalog.yml. You can also generate an example catalog using \`unipipe generate catalog\`
-#
+# 
 #####################################
 
 terraform {

@@ -18,6 +18,29 @@ export const unipipeOsbGCloudCloudRunTerraform = `
 #      4.3. Ensure your git repo contains a valid catalog.yml. You can also generate an example catalog using \`unipipe generate catalog\`
 #############################################################
 
+terraform {
+  required_version = ">= 0.14"
+
+  required_providers {
+    google = {
+      source  = "hashicorp/google"
+      version = "3.72.0"
+    }
+    tls = {
+      source  = "hashicorp/tls"
+      version = "3.1.0"
+    }
+    random = {
+      source  = "hashicorp/random"
+      version = "3.1.0"
+    }
+  }
+
+  # use local state files, if you want you can put your state files to your remote storage as well
+  backend "local" {
+  }
+}
+
 variable "create_cloudrun_service" {
   description = "You should set it as 'True' after you configure your Github repository and apply the terraform template again."
   type        = bool
@@ -62,29 +85,6 @@ variable "unipipe_git_branch" {
 variable "unipipe_basic_auth_username" {
   description = "OSB API basic auth username"
   default     = "user"
-}
-
-terraform {
-  required_version = ">= 0.14"
-
-  required_providers {
-    google = {
-      source  = "hashicorp/google"
-      version = "3.72.0"
-    }
-    tls = {
-      source  = "hashicorp/tls"
-      version = "3.1.0"
-    }
-    random = {
-      source  = "hashicorp/random"
-      version = "3.1.0"
-    }
-  }
-
-  # use local state files, if you want you can put your state files to your remote storage as well
-  backend "local" {
-  }
 }
 
 provider "google" {

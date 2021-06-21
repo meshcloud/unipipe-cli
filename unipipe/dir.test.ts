@@ -1,7 +1,7 @@
-import { path } from "./deps.ts";
-import { assertEquals } from "./dev_deps.ts";
-import { Dir, write } from "./dir.ts";
-import { withTempDir } from "./test-util.ts";
+import { path } from './deps.ts';
+import { assertEquals } from './dev_deps.ts';
+import { Dir, write } from './dir.ts';
+import { withRestoreCwd, withTempDir } from './test-util.ts';
 
 const dir: Dir = {
   name: "x",
@@ -61,5 +61,20 @@ Deno.test(
       await assertContent([tmp, "x", "y", "z"], "-1");
       await assertContent([tmp, "x", "y", "zz"], "2");
       await assertContent([tmp, "x", "yy", "zzz"], "3");
+    }),
+);
+
+Deno.test(
+  "can write into relative dir",
+  async () =>
+    await withRestoreCwd(async () => {
+      await withTempDir(async (tmp) => {
+        Deno.chdir(tmp);
+
+        await write(dir, "././"); // repeatedly referring to the same dir works as well
+        
+        // assertContent uses an absolute dir
+        await assertContent([tmp, "x", "y", "z"], "1");
+      });
     }),
 );
