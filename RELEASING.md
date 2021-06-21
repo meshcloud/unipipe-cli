@@ -14,7 +14,7 @@
 4. Commit changes. Use the convention UniPipe CLI vX.X.X” in your commit message.
    There shouldn’t be any other code changes.
 
-5. Tag the commit with the version number `git tag v.X.X.X`
+5. Tag the commit with the version number `git tag vX.X.X`
 
 6. Push the release tag `git push origin --tags`
 
