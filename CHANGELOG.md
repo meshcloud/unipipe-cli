@@ -4,6 +4,26 @@
 
 - generate aci-deployment: use local backend by default in generated terraform
 
+## v0.6.3
+
+- generate unipipe-service-broker-deployment: add a template for a unipipe-service-broker deployment on Google Cloud Run
+- generate unipipe-service-broker-deployment: improve instructions in the generated ACI terraform
+
+## v0.6.2
+
+- upgrade our deno version to "~1.10"
+- change generate "unipipe-deployment" as "unipipe-service-broker-deployment"
+
+## v0.6.1
+
+- generate: add tls and random providers support to our generate aci_tf template
+- list: show only existing resources on --deleted=false param
+- help: execute the help subcommand if there is no other args while executing unipipe command
+
+## v0.6.0
+
+- update: Add support for bindings
+
 ## v0.5.0
 
 - transform: rename the `-h/--handler` option to `-r/--registry-of-handlers` to avoid a clash with `-h/--help`
