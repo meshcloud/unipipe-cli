@@ -34,10 +34,10 @@ it_can_list_with_cloudfoundry_columns() {
 
 it_can_list_with_unknown_profile() {
   local repo_osb=$(init_repo_osb)
-  
+
   out=$(unipipe list --profile xx "$repo_osb" 2>&1) || true
-  
-  assert_eq 'Illegal option --profile: must be one of ["meshmarketplace", "cloudfoundry"] but got "xx".' "$out" "expected error"
+
+  assert_contain "$out" 'Option "--profile" must be of type "profile", but got "xx". Expected values: "meshmarketplace", "cloudfoundry"' "expected illegal argument error"
 }
 
 it_can_list_with_output_json() {
