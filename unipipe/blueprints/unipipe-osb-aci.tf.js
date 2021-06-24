@@ -121,7 +121,7 @@ resource "azurerm_container_group" "unipipe_osb_with_ssl" {
     name   = "app"
     image  = "ghcr.io/meshcloud/unipipe-service-broker:\${local.unipipe_version}"
     cpu    = "0.5"
-    memory = "1.5"
+    memory = "0.5"
 
     ports {
       port     = 8075
@@ -140,8 +140,8 @@ resource "azurerm_container_group" "unipipe_osb_with_ssl" {
   container {
     name   = "caddy"
     image  = "caddy"
-    cpu    = "0.5"
-    memory = "0.5"
+    cpu    = "0.05"
+    memory = "0.1"
 
     ports {
       port     = 443
