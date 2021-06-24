@@ -31,7 +31,9 @@ it_can_transform_using_ts() {
   local repo_osb=$(init_repo_osb)
   local repo_tf=$(init_repo)
 
-  unipipe transform --registry-of-handlers "$handlers_ts" --xport-repo "$repo_tf" "$repo_osb"
+  # note: tyoescripe registries are experimental and require an explicit allow-net permission that we do not switch
+  # on by default
+  deno run --allow-read --allow-write --allow-env --allow-net --unstable "$(dirname "$0")"/../unipipe/main.ts transform --registry-of-handlers "$handlers_ts" --xport-repo "$repo_tf" "$repo_osb"
 
   echo "Output repo TF"
   tree "$repo_tf"

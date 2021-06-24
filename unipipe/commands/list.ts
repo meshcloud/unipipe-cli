@@ -1,7 +1,7 @@
-import { Command, Table } from '../deps.ts';
+import { Command, EnumType, Table } from '../deps.ts';
 import { MeshMarketplaceContext } from '../mesh.ts';
 import { CloudFoundryContext, OsbServiceInstance, ServiceInstance } from '../osb.ts';
-import { EnumType, mapInstances } from './helpers.ts';
+import { mapInstances } from './helpers.ts';
 
 // see https://stackoverflow.com/questions/44480644/string-union-to-string-array for the trick used here
 const ALL_FORMATS = ["text", "json"] as const;

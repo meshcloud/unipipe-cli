@@ -1,6 +1,5 @@
-import { Command, path } from '../deps.ts';
+import { Command, EnumType, path } from '../deps.ts';
 import { stringify } from '../yaml.ts';
-import { EnumType } from './helpers.ts';
 
 const ALL_STATUSES = ["succeeded", "failed", "in progress"] as const;
 type StatusesTuple = typeof ALL_STATUSES;

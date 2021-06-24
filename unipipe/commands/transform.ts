@@ -19,7 +19,7 @@ export function registerTransformCmd(program: Command) {
     )
     .option(
       "-r, --registry-of-handlers <file>",
-      "A registry of handlers for processing service instance transformation. These can be defined in either javascript or typescript as a JSON object with service ids as keys and handler objects as values. Note: typescript registries are not supported in single-binary builds of unipipe-cli.",
+      "A registry of handlers for processing service instance transformation. These can be defined in javascript, see `unipipe generate transform-handler` for an example.",
     )
     .option(
       "-x, --xport-repo [path:string]",
@@ -64,24 +64,43 @@ async function loadHandlers(
       `Loading handlers as default export from typescript module ${handlerSrc}.`,
     );
 
-    const handlersModule = await import(handlerSrc);
-
-    console.debug(`loaded handler modules`, handlersModule);
-
-    return handlersModule.default;
+    return await loadTypeScriptHandlers(handlerSrc);
   } else if (handlerSrc.endsWith(".js")) {
     console.log(
       `Loading handlers as javascript via eval() from ${handlerSrc}.`,
     );
 
-    const js = await Deno.readTextFile(handlerSrc);
-    const handlersModule = eval(js);
+    return await loadJavaScriptHandlers(handlerSrc);
 
-    console.debug(`loaded handler modules`, handlersModule);
-    return handlersModule;
   } else {
     throw Error(
       "could not land handlers, unsupport handler type (needs to be a '.ts' or '.js' file).",
     );
   }
+}
+
+/**
+ * This is currently a "hidden" feature of unipipe-cli. 
+ * Loading a typescript registry only works when running via `deno run` with the `--allow-net` permission set and is
+ * therefore not available in compiled builds of unipipe-cli.
+ */
+async function loadTypeScriptHandlers(
+  handlerSrc: string,
+): Promise<Record<string, InstanceHandler>> {
+  const handlersModule = await import(handlerSrc);
+
+  console.debug(`loaded handler modules`, handlersModule);
+
+  return handlersModule.default;
+}
+
+async function loadJavaScriptHandlers(
+  handlerSrc: string,
+): Promise<Record<string, InstanceHandler>> {
+  const js = await Deno.readTextFile(handlerSrc);
+  const handlersModule = eval(js);
+
+  console.debug(`loaded handler modules`, handlersModule);
+  
+  return handlersModule;
 }
