@@ -1,5 +1,6 @@
 import { catalog } from '../blueprints/catalog.yml.js';
 import { transformHandler } from '../blueprints/handler.js.js';
+import { githubWorkflow } from '../blueprints/github-workflow.yml.js';
 import { unipipeOsbAciTerraform } from '../blueprints/unipipe-osb-aci.tf.js';
 import { unipipeOsbGCloudCloudRunTerraform } from '../blueprints/unipipe-osb-gcloud-cloudrun.js';
 import { colors, Command, Input, Select, uuid } from '../deps.ts';
@@ -25,6 +26,12 @@ export function registerGenerateCmd(program: Command) {
     )
     .action(() => generateTransformHandler())
     //
+    .command("github-workflow")
+    .description(
+      "Generate a github workflow for `Github Actions`.",
+    )
+    .action(() => generateGithubWorkflow())
+    //
     .command("unipipe-service-broker-deployment")
     .description(
       "Generate infrastructure-as-code deployments for the UniPipe Service broker.",
@@ -48,6 +55,10 @@ function generateCatalog() {
 
 function generateTransformHandler() {
   console.log(transformHandler);
+}
+
+function generateGithubWorkflow() {
+  console.log(githubWorkflow);
 }
 
 type DeploymentType = "aci_tf" | "aci_az" | "gc_cloudrun_tf";
