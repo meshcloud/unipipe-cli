@@ -1,6 +1,6 @@
 import { uuid } from '../deps.ts';
 
-export const catalog = 
+export const catalog =
 `services:
   # define a simple service offering
   # for field documentation see https://github.com/openservicebrokerapi/servicebroker/blob/v2.15/spec.md#service-offering-object
@@ -10,7 +10,7 @@ export const catalog =
     bindable: true
     tags:
       - "example"
-    plans: 
+    plans:
       # service offerings can come in one or multiple plans
       # here we define plans in different t-shirt sizes
       - id: ${uuid.generate()} # this uuid was randomly generated using "unipipe generate uuid"
@@ -129,10 +129,13 @@ export const catalog =
     plan_updateable: false
     instances_retrievable: true
     bindings_retrievable: false
+    metadata:
+      displayName: "Azure VNet Service"
+      imageUrl: "https://symbols.getvecta.com/stencil_28/71_virtual-network.4fe1e0cdfa.svg"
     plans:
       - id: ${uuid.generate()} # this uuid was randomly generated using "unipipe generate uuid"
-        name: default
-        description: Standard vNet
+        name: Standard
+        description: Standard vNet generates 1 Private and 1 Public Subnet
         free: true
         schemas:
           service_instance:
@@ -140,28 +143,34 @@ export const catalog =
               parameters:
                 "$schema": http://json-schema.org/draft-04/schema#
                 properties:
-                  count_of_leading_1_bits_in_the_routing_mask:
-                    title: size of vNet
+                  VNetIP:
+                    title: vNet IP
+                    type: string
+                    widget:
+                      id: string
+                    default: "10.X.X.X"
+                  CidrBlock:
+                    title: CIDR Block
                     type: string
                     widget:
                       id: select
                     default: "28"
                     oneOf:
-                      - description: /27 vNet with 11 addresses (+5 addresses reserved by Azure)
+                      - description: /28 vNet with 6 addresses (+5 addresses reserved by Azure per each subnet)
+                        enum:
+                          - "28"
+                      - description: /27 vNet with 22 addresses (+5 addresses reserved by Azure per each subnet)
                         enum:
                           - "27"
-                      - description: /26 vNet with 27 addresses (+5 addresses reserved by Azure)
+                      - description: /26 vNet with 56 addresses (+5 addresses reserved by Azure per each subnet)
                         enum:
                           - "26"
-                      - description: /25 vNet with 61 addresses (+5 addresses reserved by Azure)
+                      - description: /25 vNet with 118 addresses (+5 addresses reserved by Azure per each subnet)
                         enum:
                           - "25"
-                      - description: /24 vNet with 123 addresses (+5 addresses reserved by Azure)
+                      - description: /24 vNet with 246 addresses (+5 addresses reserved by Azure per each subnet)
                         enum:
                           - "24"
-                      - description: /23 vNet with 251 addresses (+5 addresses reserved by Azure)
-                        enum:
-                          - "23"
                   VNetRegion:
                     title: vNet Region
                     type: string
