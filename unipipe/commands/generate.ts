@@ -2,6 +2,7 @@ import { catalog } from '../blueprints/catalog.yml.js';
 import { basicTransformHandler } from '../blueprints/basic-handler.js.js';
 import { terraformTransformHandler } from '../blueprints/terraform-handler.js.js';
 import { githubWorkflow } from '../blueprints/github-workflow.yml.js';
+import { executionScript } from '../blueprints/execution-script.sh.js';
 import { unipipeOsbAciTerraform } from '../blueprints/unipipe-osb-aci.tf.js';
 import { unipipeOsbGCloudCloudRunTerraform } from '../blueprints/unipipe-osb-gcloud-cloudrun.js';
 import { colors, Command, Input, Select, uuid } from '../deps.ts';
@@ -33,6 +34,12 @@ export function registerGenerateCmd(program: Command) {
     )
     .action(() => generateGithubWorkflow())
     //
+    .command("execution-script")
+    .description(
+      "Generate an execution shell script to apply your terraform templates.",
+    )
+    .action(() => generateExecutionScript())
+    //
     .command("unipipe-service-broker-deployment")
     .description(
       "Generate infrastructure-as-code deployments for the UniPipe Service broker.",
@@ -60,6 +67,20 @@ async function generateCatalog() {
     name: destinationDir,
     entries: [
       { name: "catalog.yml", content: catalog },
+    ],
+  };
+  writeDirectory(dir);
+}
+
+async function generateExecutionScript() {
+  const destinationDir = await Input.prompt({
+    message: "Pick a destination directory for the generated execution script file:",
+    default: "./",
+  });
+  const dir: Dir = {
+    name: destinationDir,
+    entries: [
+      { name: "execute-terraform-templates.sh", content: executionScript },
     ],
   };
   writeDirectory(dir);
@@ -107,7 +128,6 @@ async function generateTransformHandler() {
 }
 
 async function generateGithubWorkflow() {
-  console.log(githubWorkflow);
   const destinationDir = await Input.prompt({
     message: "Pick a destination directory for the generated github-workflow file:",
     default: "./",
