@@ -49,16 +49,49 @@ function generateUuid() {
   console.log(uuid.generate());
 }
 
-function generateCatalog() {
+async function generateCatalog() {
   console.log(catalog);
+  const destinationDir = await Input.prompt({
+    message: "Pick a destination directory for the generated catalog file:",
+    default: "./",
+  });
+  const dir: Dir = {
+    name: destinationDir,
+    entries: [
+      { name: "catalog.yml", content: catalog },
+    ],
+  };
+  writeDirectory(dir);
 }
 
-function generateTransformHandler() {
+async function generateTransformHandler() {
   console.log(transformHandler);
+  const destinationDir = await Input.prompt({
+    message: "Pick a destination directory for the generated transform file:",
+    default: "./",
+  });
+  const dir: Dir = {
+    name: destinationDir,
+    entries: [
+      { name: "handler.js", content: transformHandler },
+    ],
+  };
+  writeDirectory(dir);
 }
 
-function generateGithubWorkflow() {
+async function generateGithubWorkflow() {
   console.log(githubWorkflow);
+  const destinationDir = await Input.prompt({
+    message: "Pick a destination directory for the generated github-workflow file:",
+    default: "./",
+  });
+  const dir: Dir = {
+    name: destinationDir,
+    entries: [
+      { name: "github-workflow.yml", content: githubWorkflow },
+    ],
+  };
+  writeDirectory(dir);
 }
 
 type DeploymentType = "aci_tf" | "aci_az" | "gc_cloudrun_tf";
@@ -91,7 +124,7 @@ async function generateUniPipeDeployment() {
         ],
       };
 
-      writeTerraformDir(dir);
+      writeDirectory(dir);
       writeTerraformInstructions(unipipeOsbAciTerraform);
       break;
     }
@@ -103,7 +136,7 @@ async function generateUniPipeDeployment() {
         ],
       };
 
-      writeTerraformDir(dir);
+      writeDirectory(dir);
       writeTerraformInstructions(unipipeOsbGCloudCloudRunTerraform);
       break;
     }
@@ -112,7 +145,7 @@ async function generateUniPipeDeployment() {
   }
 }
 
-async function writeTerraformDir(dir: Dir){
+async function writeDirectory(dir: Dir){
   await write(
     dir,
     "./",
