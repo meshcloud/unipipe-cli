@@ -1,5 +1,6 @@
 import { catalog } from '../blueprints/catalog.yml.js';
-import { transformHandler } from '../blueprints/handler.js.js';
+import { basicTransformHandler } from '../blueprints/basic-handler.js.js';
+import { terraformTransformHandler } from '../blueprints/terraform-handler.js.js';
 import { githubWorkflow } from '../blueprints/github-workflow.yml.js';
 import { unipipeOsbAciTerraform } from '../blueprints/unipipe-osb-aci.tf.js';
 import { unipipeOsbGCloudCloudRunTerraform } from '../blueprints/unipipe-osb-gcloud-cloudrun.js';
@@ -64,19 +65,45 @@ async function generateCatalog() {
   writeDirectory(dir);
 }
 
+type HandlerType = "handler_b" | "handler_tf";
 async function generateTransformHandler() {
-  console.log(transformHandler);
+  const target: HandlerType = await Select.prompt({
+    message: "Pick the target deployment environment:",
+    options: [
+      { name: "Basic Handler", value: "handler_b" },
+      { name: "Terraform Handler", value: "handler_tf" },
+    ],
+  }) as HandlerType;
+
   const destinationDir = await Input.prompt({
     message: "Pick a destination directory for the generated transform file:",
     default: "./",
   });
-  const dir: Dir = {
-    name: destinationDir,
-    entries: [
-      { name: "handler.js", content: transformHandler },
-    ],
-  };
-  writeDirectory(dir);
+
+  switch (target) {
+    case "handler_b": {
+      const dir: Dir = {
+        name: destinationDir,
+        entries: [
+          { name: "handler.js", content: basicTransformHandler },
+        ],
+      };
+      writeDirectory(dir);
+      break;
+    }
+    case "handler_tf": {
+      const dir: Dir = {
+        name: destinationDir,
+        entries: [
+          { name: "handler.js", content: terraformTransformHandler },
+        ],
+      };
+      writeDirectory(dir);
+      break;
+    }
+    default:
+      throw new Error(`Received unexpected target ${target} from prompt.`);
+  }
 }
 
 async function generateGithubWorkflow() {
