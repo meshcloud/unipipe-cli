@@ -59,31 +59,17 @@ function generateUuid() {
 
 async function generateCatalog() {
   console.log(catalog);
-  const destinationDir = await Input.prompt({
-    message: "Pick a destination directory for the generated catalog file:",
-    default: "./",
-  });
-  const dir: Dir = {
-    name: destinationDir,
-    entries: [
-      { name: "catalog.yml", content: catalog },
-    ],
-  };
-  writeDirectory(dir);
+  outputFile("catalog.yml", catalog, "Pick a destination directory for the generated catalog file:")
 }
 
 async function generateExecutionScript() {
-  const destinationDir = await Input.prompt({
-    message: "Pick a destination directory for the generated execution script file:",
-    default: "./",
-  });
-  const dir: Dir = {
-    name: destinationDir,
-    entries: [
-      { name: "execute-terraform-templates.sh", content: executionScript },
-    ],
-  };
-  writeDirectory(dir);
+  console.log(executionScript);
+  outputFile("execute-terraform-templates.sh", executionScript, "Pick a destination directory for the generated execution script file:")
+}
+
+async function generateGithubWorkflow() {
+  console.log(githubWorkflow);
+  outputFile("github-workflow.yml", githubWorkflow, "Pick a destination directory for the generated github-workflow file:")
 }
 
 type HandlerType = "handler_b" | "handler_tf";
@@ -96,30 +82,15 @@ async function generateTransformHandler() {
     ],
   }) as HandlerType;
 
-  const destinationDir = await Input.prompt({
-    message: "Pick a destination directory for the generated transform file:",
-    default: "./",
-  });
-
   switch (target) {
     case "handler_b": {
-      const dir: Dir = {
-        name: destinationDir,
-        entries: [
-          { name: "handler.js", content: basicTransformHandler },
-        ],
-      };
-      writeDirectory(dir);
+      console.log(basicTransformHandler);
+      outputFile("handler.js", basicTransformHandler, "Pick a destination directory for the generated transform file:")
       break;
     }
     case "handler_tf": {
-      const dir: Dir = {
-        name: destinationDir,
-        entries: [
-          { name: "handler.js", content: terraformTransformHandler },
-        ],
-      };
-      writeDirectory(dir);
+      console.log(terraformTransformHandler);
+      outputFile("handler.js", terraformTransformHandler, "Pick a destination directory for the generated transform file:")
       break;
     }
     default:
@@ -127,35 +98,16 @@ async function generateTransformHandler() {
   }
 }
 
-async function generateGithubWorkflow() {
-  const destinationDir = await Input.prompt({
-    message: "Pick a destination directory for the generated github-workflow file:",
-    default: "./",
-  });
-  const dir: Dir = {
-    name: destinationDir,
-    entries: [
-      { name: "github-workflow.yml", content: githubWorkflow },
-    ],
-  };
-  writeDirectory(dir);
-}
-
-type DeploymentType = "aci_tf" | "aci_az" | "gc_cloudrun_tf";
+type DeploymentType = "aci_tf" | "aci_az" | "gcp_cloudrun_tf";
 async function generateUniPipeDeployment() {
   const target: DeploymentType = await Select.prompt({
     message: "Pick the target deployment environment:",
     options: [
       { name: "Azure ACI (terraform)", value: "aci_tf" },
       { name: "Azure ACI (azure-cli)", value: "aci_az" },
-      { name: "GCloud CloudRun (terraform)", value: "gc_cloudrun_tf" },
+      { name: "GCP CloudRun (terraform)", value: "gcp_cloudrun_tf" },
     ],
   }) as DeploymentType;
-
-  const destinationDir = await Input.prompt({
-    message: "Pick a destination directory for the generated terraform files:",
-    default: "./",
-  });
 
   switch (target) {
     case "aci_az":
@@ -164,32 +116,34 @@ async function generateUniPipeDeployment() {
       );
       break;
     case "aci_tf": {
-      const dir: Dir = {
-        name: destinationDir,
-        entries: [
-          { name: "main.tf", content: unipipeOsbAciTerraform },
-        ],
-      };
-
-      writeDirectory(dir);
+      console.log(unipipeOsbAciTerraform);
+      outputFile("unipipe-service-broker-deployment-azure.tf", unipipeOsbAciTerraform, "Pick a destination directory for the generated transform file:")
       writeTerraformInstructions(unipipeOsbAciTerraform);
       break;
     }
-    case "gc_cloudrun_tf": {
-      const dir: Dir = {
-        name: destinationDir,
-        entries: [
-          { name: "main.tf", content: unipipeOsbGCloudCloudRunTerraform },
-        ],
-      };
-
-      writeDirectory(dir);
+    case "gcp_cloudrun_tf": {
+      console.log(unipipeOsbGCloudCloudRunTerraform);
+      outputFile("unipipe-service-broker-deployment-gcp.tf", unipipeOsbGCloudCloudRunTerraform, "Pick a destination directory for the generated transform file:")
       writeTerraformInstructions(unipipeOsbGCloudCloudRunTerraform);
       break;
     }
     default:
       throw new Error(`Received unexpected target ${target} from prompt.`);
   }
+}
+
+async function outputFile(fileName: string, content: string, message: string) {
+  const destinationDir = await Input.prompt({
+    message: message,
+    default: "./",
+  });
+  const dir: Dir = {
+    name: destinationDir,
+    entries: [
+      { name: fileName, content: content },
+    ],
+  };
+  writeDirectory(dir);
 }
 
 async function writeDirectory(dir: Dir){
