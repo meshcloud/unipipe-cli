@@ -41,7 +41,7 @@ class MyHandler {
 
 const handlers = {
   // Check your service id and replace the following key. You can find the service ids inside of your catalog.yml file.
-  "${uuid.generate()}": new MyHandler(),
+  "$SERVICEID": new MyHandler(),
 };
 
 handlers;

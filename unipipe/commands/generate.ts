@@ -82,15 +82,33 @@ async function generateTransformHandler() {
     ],
   }) as HandlerType;
 
+  const uuidInput = await Input.prompt({
+    message: "Write the Service Id that will be controlled by the handler. Press enter to continue.",
+    default: "Default: Auto-generated UUID",
+  });
+
+  var outputContent = ""
   switch (target) {
     case "handler_b": {
-      console.log(basicTransformHandler);
-      outputFile("handler.js", basicTransformHandler, "Pick a destination directory for the generated transform file:")
+      if (uuidInput == "Default: Auto-generated UUID"){
+        outputContent = basicTransformHandler.replaceAll('$SERVICEID', `${uuid.generate()}` )
+      }
+      else {
+        outputContent = basicTransformHandler.replaceAll('$SERVICEID', uuidInput )
+      }
+      console.log(outputContent);
+      outputFile("handler.js", outputContent, "Pick a destination directory for the generated transform file:")
       break;
     }
     case "handler_tf": {
-      console.log(terraformTransformHandler);
-      outputFile("handler.js", terraformTransformHandler, "Pick a destination directory for the generated transform file:")
+      if (uuidInput == "Default: Auto-generated UUID"){
+        outputContent = terraformTransformHandler.replaceAll('$SERVICEID', `${uuid.generate()}` )
+      }
+      else {
+        outputContent = terraformTransformHandler.replaceAll('$SERVICEID', uuidInput )
+      }
+      console.log(outputContent);
+      outputFile("handler.js", outputContent, "Pick a destination directory for the generated transform file:")
       break;
     }
     default:
