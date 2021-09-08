@@ -162,7 +162,7 @@ export const catalog =
                       - description: /27 vNet with 22 addresses (+5 addresses reserved by Azure per each subnet)
                         enum:
                           - "27"
-                      - description: /26 vNet with 56 addresses (+5 addresses reserved by Azure per each subnet)
+                      - description: /26 vNet with 54 addresses (+5 addresses reserved by Azure per each subnet)
                         enum:
                           - "26"
                       - description: /25 vNet with 118 addresses (+5 addresses reserved by Azure per each subnet)
