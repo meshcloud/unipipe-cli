@@ -4,6 +4,13 @@
 
 - generate aci-deployment: use local backend by default in generated terraform
 
+## v0.6.4
+
+- generate execution-script: add an example for execution-script
+- generate github-workflow: add an example for github-action workflows
+- generate transform-handler: add terraform example into transform-handlers. there are 2 options at the moment ( basic | terraform )
+- add parameter support on generate commands. inputs can be passes without a prompt
+
 ## v0.6.3
 
 - generate unipipe-service-broker-deployment: add a template for a unipipe-service-broker deployment on Google Cloud Run

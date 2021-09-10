@@ -26,7 +26,7 @@ encounter.
 
 ```text
 Usage:   unipipe
-Version: v0.6.3
+Version: v0.6.4
 
 Description:
 

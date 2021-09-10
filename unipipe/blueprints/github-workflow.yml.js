@@ -3,7 +3,7 @@ name: Update Instances
 concurrency: osb-instances # signal that we're modifying instances
 
 env:
-  unipipe-version: v0.6.3
+  unipipe-version: v0.6.4
   # Use Github Repository Secrets to set your credentials.
   MY_SECRET_KEY: \${{ secrets.MY_SECRET_KEY }}
 
