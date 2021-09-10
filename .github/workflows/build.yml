@@ -8,6 +8,7 @@ on:
 
 jobs:
   build:
+    timeout-minutes: 3 # Generally our pipeline takes 1 minute to build everything.
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -25,7 +26,7 @@ jobs:
           deno info
 
           ./build.sh
-          
+
           cd test
           ./all.sh ../bin/unipipe
       - name: Archive production artifacts

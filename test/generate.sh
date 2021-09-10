@@ -14,17 +14,17 @@ it_can_generate_uuid() {
 }
 
 it_can_generate_catalog() {
-  local catalog=$(unipipe generate catalog)
-  
+  unipipe generate catalog --destination ./output
+
   # test the generated catalog is valid yaml
-  deno run ./parse-yaml.ts -q <<< "$catalog"
+  deno run ./parse-yaml.ts -q <<< ./output/catalog.yml
 }
 
 it_can_generate_transform-handler() {
-  local handler=$(unipipe generate transform-handler)
-  
+  unipipe generate transform-handler --handler handler_b --uuid `unipipe generate uuid` --destination ./output
+
   # test the generated handler is valid js
-  deno run --no-check - <<< "// deno-lint-ignore-file\n $handler"
+  deno run --no-check - <<< "// deno-lint-ignore-file\n "`cat ./output/handler.js`
 }
 
 run it_can_show_generate_help

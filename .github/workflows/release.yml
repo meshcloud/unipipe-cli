@@ -21,6 +21,7 @@ jobs:
   release:
     # if condition becomes relevant when cross workflow artifact downloads will be available
     # if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    timeout-minutes: 3 # Generally our pipeline takes 1 minute to build everything. 
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

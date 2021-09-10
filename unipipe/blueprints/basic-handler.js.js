@@ -1,4 +1,6 @@
-export const transformHandler = `
+import { uuid } from '../deps.ts';
+
+export const basicTransformHandler = `
 /**
  Here's a full example for a handlers.js file that you can pass to unipipe transform --registry-of-handlers and that writes service instance parameters into a custom directory structure:
 
@@ -38,7 +40,8 @@ class MyHandler {
 }
 
 const handlers = {
-  "d90c2b20-1d24-4592-88e7-6ab5eb147925": new MyHandler(),
+  // Check your service id and replace the following key. You can find the service ids inside of your catalog.yml file.
+  "$SERVICEID": new MyHandler(),
 };
 
 handlers;
