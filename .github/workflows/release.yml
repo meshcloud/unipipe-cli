@@ -27,14 +27,15 @@ jobs:
       - uses: actions/checkout@v2
       - uses: denoland/setup-deno@main
         with:
-          deno-version: "~1.10"
+          deno-version: "~1.14"
       - uses: actions/cache@v2
         with:
           path: ~/.cache/deno # see https://deno.land/manual/linking_to_external_code
           key: ${{ runner.os }}-deno # it seems there's no particular cache keying required
           restore-keys: |
             ${{ runner.os }}-deno
-      - run: |
+      - name: Build and Test 
+        run: |
           deno --version
           deno info
 
